@@ -1,7 +1,8 @@
 import Hapi from "@hapi/hapi";
 import "dotenv/config";
 import "@dotenvx/dotenvx/config";
-import * as config from "./config/index.js";
+// import * as config from "./config/index.js";
+import config from './config/index.js';
 // modules import
 import { authPlugin } from "./api/auth/index.js";
 import { configureJwtStrategy } from "./auth/strategy.js";
@@ -11,8 +12,8 @@ import { ordersPlugin } from "./api/orders/index.js";
 
 export const init = async () => {
   const server = Hapi.server({
-    host: config.HOST,
-    port: process.env.NODE_ENV === "test" ? 0 : config.PORT,
+    host: config.server.host,
+    port: config.server.port,
     routes: {
       cors: {
         origin: ["*"],
@@ -39,7 +40,7 @@ export const init = async () => {
 
   await server.start();
   console.log(`server running on ${server.info.uri}`);
-
+  // console.log(config.db.url);
   // for testing units
   return server;
 };

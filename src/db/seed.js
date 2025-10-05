@@ -8,24 +8,36 @@ dotenv.config();
 
 const adminUser = {
   id: crypto.randomUUID(),
-  username: "test",
-  email: "test@test.com",
-  plainPassword: "########",
+  username: "cashier",
+  email: "cashier@test.com",
+  plainPassword: "cashier666",
   role: "CASHIER",
 };
 
-const productsToSeed = [
-  { name: "Nasi Goreng Spesial", price: 25000, category: "FOOD", stock: 50 },
-  { name: "Mie Goreng Seafood", price: 28000, category: "FOOD", stock: 40 },
-  { name: "Ayam Bakar Madu", price: 35000, category: "FOOD", stock: 30 },
-  { name: "Sate Ayam (10 tusuk)", price: 22000, category: "FOOD", stock: 60 },
-  //
-  { name: "Es Teh Manis", price: 5000, category: "BEVERAGE", stock: 100 },
-  { name: "Jus Alpukat", price: 15000, category: "BEVERAGE", stock: 25 },
-  { name: "Kopi Hitam", price: 8000, category: "BEVERAGE", stock: 80 },
-  //
-  { name: "Kentang Goreng", price: 12000, category: "SNACK", stock: 70 },
-  { name: "Pisang Goreng Keju", price: 15000, category: "DESSERT", stock: 35 },
+const productsDummy = [
+  // jp
+  { name: 'Tonkotsu Ramen', price: 75000, category: 'FOOD', stock: 40 },
+  { name: 'Salmon Sushi Set (8 pcs)', price: 95000, category: 'FOOD', stock: 25 },
+  { name: 'Chicken Katsu Curry', price: 68000, category: 'FOOD', stock: 35 },
+  { name: 'Edamame', price: 25000, category: 'SNACK', stock: 50 },
+  { name: 'Iced Ocha', price: 15000, category: 'BEVERAGE', stock: 100 },
+
+  // italian
+  { name: 'Margherita Pizza', price: 85000, category: 'FOOD', stock: 20 },
+  { name: 'Spaghetti Carbonara', price: 78000, category: 'FOOD', stock: 30 },
+  { name: 'Tiramisu', price: 45000, category: 'DESSERT', stock: 25 },
+  { name: 'Espresso', price: 22000, category: 'BEVERAGE', stock: 100 },
+
+  // us
+  { name: 'Classic Beef Burger', price: 65000, category: 'FOOD', stock: 45 },
+  { name: 'BBQ Back Ribs', price: 155000, category: 'FOOD', stock: 15 },
+  { name: 'French Fries', price: 28000, category: 'SNACK', stock: 80 },
+  { name: 'Chocolate Milkshake', price: 35000, category: 'BEVERAGE', stock: 40 },
+
+  // fr
+  { name: 'French Onion Soup', price: 55000, category: 'SNACK', stock: 20 },
+  { name: 'Crème Brûlée', price: 42000, category: 'DESSERT', stock: 30 },
+  { name: 'Café au Lait', price: 28000, category: 'BEVERAGE', stock: 60 },
 ];
 
 async function seedAdminUser(client) {
@@ -58,13 +70,9 @@ async function seedAdminUser(client) {
   console.log("Admin user seeding finished.");
 }
 
-// async function seedSuperAdmin(client){
-
-// }
-
 async function seedProducts(client) {
   console.log("Seeding products...");
-  for (const product of productsToSeed) {
+  for (const product of productsDummy) {
     const existingProduct = await client.query(
       "SELECT * FROM products WHERE name = $1",
       [product.name]
@@ -89,7 +97,7 @@ async function main() {
     console.log("Starting database seeding process...");
     await client.query("BEGIN");
     await seedAdminUser(client);
-    // await seedProducts(client);
+    await seedProducts(client);
     await client.query("COMMIT");
     console.log("Seeding completed successfully.");
   } catch (error) {

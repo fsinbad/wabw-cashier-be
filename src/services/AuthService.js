@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import AuthenticationError from "../exceptions/AuthenticationError.js";
+import config from "../config/index.js";
 
 const AUTH_ERROR_MESSAGE = "incorrect credentials given";
 
@@ -25,7 +26,7 @@ export default class AuthService {
         email: user.email,
         role: user.role,
       };
-      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      const token = jwt.sign(payload, config.jwt.secret, {
         expiresIn: process.env.JWT_EXPIRES_IN,
       });
       return {
