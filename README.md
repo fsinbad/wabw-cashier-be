@@ -10,7 +10,6 @@ A backend boilerplate for Node.js, Hapi.js, and PostgreSQL, runnable with Docker
 
 ## Installation
 
-
 Clone this repo and set up your `.env` file. 
 ```bash
 git clone https://github.com/niokagi/hapi-pgsql-boilerplate.git
@@ -38,14 +37,14 @@ This project uses [dotenvx](https://dotenvx.com) to manage environment variables
 
 ### Workflow
 
-1.  **Edit Variables:** Make changes to your local, plain-text `.env` file as you normally would.
+**1. Edit Variables:** Make changes to your local, plain-text `.env` file as you normally would.
 
-2.  **Encrypt Variables:** After editing, run the `encrypt` command. This will read your `.env` file and generate/update an encrypted `.env.vault` file. This vault file is safe to commit to Git.
-    ```bash
-    npx dotenvx encrypt
-    ```
+**2. Encrypt Variables:** After editing, run the `encrypt` command. This will read your `.env` file and generate/update an encrypted `.env.vault / .env` file. This vault file is safe to commit to Git.
+```bash
+npx dotenvx encrypt
+```
 
-3.  **Viewing/Decrypting Variables:** If you ever need to see the plain-text variables stored in the vault, you can decrypt them to your terminal (this requires the `.env.key` file to be present).
+**3. Viewing/Decrypting Variables:** If you ever need to see the plain-text variables stored in the vault, you can decrypt them to your terminal (this requires the `.env.key` file to be present).
     ```bash
     npx dotenvx decrypt
     ```
@@ -57,7 +56,7 @@ The `package.json` scripts (`start`, `dev`, `migrate`, `seed`) are already confi
 ## Run with a Local PostgreSQL Instance
 This workflow is an alternative to Docker if you prefer to run Node.js and PostgreSQL directly on your host machine.
 
-### 1. Create and Migrate the Database
+**1. Create and Migrate the Database**
 **Create the Database Manually**
 Before running migrations, you must create the database on your PostgreSQL server. Connect using `psql` or a GUI client (like DBeaver/pgAdmin) and run:
 ```sql
@@ -65,7 +64,7 @@ CREATE DATABASE "hapi-starter";
 ```
 *Note: Ensure the name matches the `PGDATABASE` value in your `.env` file.*
 
-### 2. Run Migrations
+**2. Run Migrations**
 ```bash
 npm run migrate up
 ```
@@ -77,7 +76,7 @@ Migration commands:
 | `npm run migrate up`     | Apply all pending migrations.              |
 | `npm run migrate down`   | Revert the last applied migration.         |
 
-### 3. Run the Development Server
+**3. Run the Development Server**
 ```bash
 npm run dev
 ```
