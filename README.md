@@ -30,9 +30,9 @@ Create a master encryption key. This will generate a `.env.key` file.
 ```bash
 npx dotenvx gen-key
 ```
-**1. Update 
+**1. Update `.gitignore`:**
 
-`.gitignore`:** Ensure `.env` and `.env.key` are listed in your `.gitignore` file. These files should **never** be committed.
+Ensure `.env` and `.env.key` are listed in your `.gitignore` file. These files should **never** be committed.
 ```gitignore
 # environment variables
 .env
