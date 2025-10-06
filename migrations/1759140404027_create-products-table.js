@@ -15,6 +15,14 @@ export const up = (pgm) => {
     price: { type: "decimal(10, 2)", notNull: true },
     category: { type: "product_category", notNull: true },
     stock: { type: "integer", notNull: true, default: 0 },
+    image_url: {
+      type: "varchar(255)",
+      notNull: false,
+    },
+    description: {
+      type: 'text',
+      notNull: false,
+    },
     created_at: {
       type: "timestamptz",
       notNull: true,

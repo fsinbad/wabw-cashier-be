@@ -1,4 +1,3 @@
-// src/db/seed.js
 import "dotenv/config";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
@@ -10,7 +9,7 @@ const adminUser = {
   id: crypto.randomUUID(),
   username: "cashier",
   email: "cashier@test.com",
-  plainPassword: "cashier666",
+  plainPassword: "#######",
   role: "CASHIER",
 };
 
@@ -19,7 +18,6 @@ const productsDummy = [
   { name: 'Tonkotsu Ramen', price: 75000, category: 'FOOD', stock: 40 },
   { name: 'Salmon Sushi Set (8 pcs)', price: 95000, category: 'FOOD', stock: 25 },
   { name: 'Chicken Katsu Curry', price: 68000, category: 'FOOD', stock: 35 },
-  { name: 'Edamame', price: 25000, category: 'SNACK', stock: 50 },
   { name: 'Iced Ocha', price: 15000, category: 'BEVERAGE', stock: 100 },
 
   // italian
@@ -31,11 +29,9 @@ const productsDummy = [
   // us
   { name: 'Classic Beef Burger', price: 65000, category: 'FOOD', stock: 45 },
   { name: 'BBQ Back Ribs', price: 155000, category: 'FOOD', stock: 15 },
-  { name: 'French Fries', price: 28000, category: 'SNACK', stock: 80 },
   { name: 'Chocolate Milkshake', price: 35000, category: 'BEVERAGE', stock: 40 },
 
   // fr
-  { name: 'French Onion Soup', price: 55000, category: 'SNACK', stock: 20 },
   { name: 'Crème Brûlée', price: 42000, category: 'DESSERT', stock: 30 },
   { name: 'Café au Lait', price: 28000, category: 'BEVERAGE', stock: 60 },
 ];
@@ -95,6 +91,7 @@ async function main() {
   const client = await pool.connect();
   try {
     console.log("Starting database seeding process...");
+    // execute
     await client.query("BEGIN");
     await seedAdminUser(client);
     await seedProducts(client);

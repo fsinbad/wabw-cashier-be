@@ -31,7 +31,7 @@ export default class UsersService {
 
     try {
       await this.verifyNewUsername(username);
-      const id = `user-${this._idGenerator()}`;
+      const id = `${this._idGenerator()}`;
       const hashedPassword = await bcrypt.hash(password, 10);
       const query = {
         text: 'INSERT INTO users(id, username, email, password, role) VALUES($1, $2, $3, $4, $5) RETURNING id',
