@@ -24,30 +24,40 @@ This project uses [dotenvx](https://dotenvx.com) to manage environment variables
 
 ### Initial Setup (First time only)
 
-1.  **Generate a Key:** Create a master encryption key. This will generate a `.env.key` file.
-    ```bash
-    npx dotenvx gen-key
-    ```
-2.  **Update `.gitignore`:** Ensure `.env` and `.env.key` are listed in your `.gitignore` file. These files should **never** be committed.
-    ```gitignore
-    # Environment variables
-    .env
-    .env.key
-    ```
+**1. Generate a Key:**
+
+Create a master encryption key. This will generate a `.env.key` file.
+```bash
+npx dotenvx gen-key
+```
+**1. Update 
+
+`.gitignore`:** Ensure `.env` and `.env.key` are listed in your `.gitignore` file. These files should **never** be committed.
+```gitignore
+# environment variables
+.env
+.env.key
+```
 
 ### Workflow
 
-**1. Edit Variables:** Make changes to your local, plain-text `.env` file as you normally would.
+**1. Edit Variables:**
 
-**2. Encrypt Variables:** After editing, run the `encrypt` command. This will read your `.env` file and generate/update an encrypted `.env.vault / .env` file. This vault file is safe to commit to Git.
+Make changes to your local, plain-text `.env` file as you normally would.
+
+**2. Encrypt Variables:**
+
+After editing, run the `encrypt` command. This will read your `.env` file and generate/update an encrypted `.env.vault / .env` file. This vault file is safe to commit to Git.
 ```bash
 npx dotenvx encrypt
 ```
 
-**3. Viewing/Decrypting Variables:** If you ever need to see the plain-text variables stored in the vault, you can decrypt them to your terminal (this requires the `.env.key` file to be present).
-    ```bash
-    npx dotenvx decrypt
-    ```
+**3. Viewing/Decrypting Variables:** 
+
+If you ever need to see the plain-text variables stored in the vault, you can decrypt them to your terminal (this requires the `.env.key` file to be present).
+```bash
+npx dotenvx decrypt
+```
 
 ### How It Works with NPM Scripts
 
