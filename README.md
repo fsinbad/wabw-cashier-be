@@ -1,6 +1,6 @@
-# Hapi.js & PostgreSQL Boilerplate
+# Backend for Cashier web assignment
 
-A backend boilerplate for Node.js, Hapi.js, and PostgreSQL, runnable with Docker or a local development environment.
+Developed using Hapi.js and PostgreSQL, this backend application is designed to run seamlessly in both Docker and local development environments. It also supports optional deployment using Supabase for cloud-based database management.
 
 ## Prerequisites
 
