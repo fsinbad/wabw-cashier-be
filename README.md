@@ -13,9 +13,11 @@ Developed using Hapi.js and PostgreSQL, this backend application is designed to 
 Clone this repo and set up your `.env` file. 
 ```bash
 git clone https://github.com/niokagi/hapi-pgsql-boilerplate.git
-
+```
+```bash
 cd hapi-pgsql-boilerplate
-
+```
+```bash
 cp .env.example .env
 ```
 ## Environment Variables & Security (`dotenvx`)
@@ -24,22 +26,20 @@ This project uses [dotenvx](https://dotenvx.com) to manage environment variables
 
 ### Initial Setup (First time only)
 
-**1. Generate a Key:** Create a master encryption key. This will generate a `.env.key` file.
+**1. Encrypting your .env file by default:**
 ```bash
-npx dotenvx gen-key
+npx dotenvx encryot
+```
+or
+
+```bash
+npx dotenvx -f .env.production
 ```
 **1. Update `.gitignore`:** Ensure `.env` and `.env.key` are listed in your `.gitignore` file. These files should **never** be committed.
 ```gitignore
 # environment variables
 .env
-.env.key
-```
-
-### Workflow
-
-**2. Encrypt Variables:**
-```bash
-npx dotenvx encrypt
+.env.keys
 ```
 
 **3. Viewing/Decrypting Variables:**
@@ -49,7 +49,7 @@ npx dotenvx decrypt
 
 ### How It Works with NPM Scripts
 
-The `package.json` scripts (`start`, `dev`, `migrate`, `seed`) are already configured to use `dotenvx run --`. This command automatically decrypts the `.env.vault` in memory using your local `.env.key` and injects the variables into the node process, so you don't need to do anything extra.
+The `package.json` scripts (`start`, `dev`, `migrate`, `seed`) are already configured to use `dotenvx run -f .env.production -- nodemon src/server.js`. This command automatically decrypts the `.env or .env.production` in memory using your local `.env.keys` and injects the variables into the node process, so you don't need to do anything extra.
 
 ## Run with a Local PostgreSQL Instance
 This workflow is an alternative to Docker if you prefer to run Node.js and PostgreSQL directly on your host machine.
@@ -80,7 +80,7 @@ npm run dev
 ```
 The server will be running on `http://localhost:3000` by default.
 
-## Dev Workflow with Docker
+<!-- ## Dev Workflow with Docker
 
 | Command                                           | Description                                  |
 | ------------------------------------------------- | -------------------------------------------- |
@@ -91,9 +91,9 @@ The server will be running on `http://localhost:3000` by default.
 | `docker-compose exec app npm run migrate up`     | Run all pending migrations.                  |
 | `docker-compose exec db psql -U <user> -d <db>`  | Open PostgreSQL shell inside container.      |
 
-*Note: Use `localhost` with `.env` credentials for GUI clients (e.g., DBeaver, TablePlus).*
+*Note: Use `localhost` with `.env` credentials for GUI clients (e.g., DBeaver, TablePlus).* -->
 
-<!-- ## (Alternative) Run with a Cloud Database (Supabase)
+## Run with a Supabase (Alternative)
 
 This boilerplate is pre-configured to work seamlessly with a managed PostgreSQL provider like Supabase.
 
@@ -104,4 +104,4 @@ This boilerplate is pre-configured to work seamlessly with a managed PostgreSQL 
 
 3.  **Update `.env` File**
 
-4.  **Run Migrations & Start the Server** -->
+4.  **Run Migrations & Start the Server**
