@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../lib/supabaseConf.js';
 import InvariantError from '../exceptions/InvariantError.js';
 
 class StorageService {
