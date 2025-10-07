@@ -12,7 +12,7 @@ import { ordersPlugin } from "./api/orders/index.js";
 
 export const init = async () => {
   const server = Hapi.server({
-    host: config.server.host,
+    host: '0.0.0.0',
     port: config.server.port,
     routes: {
       cors: {
