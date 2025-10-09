@@ -8,6 +8,7 @@ export default class ProductsHandler {
 
     this.postProductHandler = this.postProductHandler.bind(this);
     this.getProductsHandler = this.getProductsHandler.bind(this);
+    this.getProductCategoriesHandler = this.getProductCategoriesHandler.bind(this);
     this.getProductByIdHandler = this.getProductByIdHandler.bind(this);
     this.putProductByIdHandler = this.putProductByIdHandler.bind(this);
     this.deleteProductByIdHandler = this.deleteProductByIdHandler.bind(this);
@@ -39,6 +40,19 @@ export default class ProductsHandler {
         status: "success",
         data: { products },
       };
+    } catch (error) {
+      console.error(error);
+      return Boom.internal();
+    }
+  }
+
+  async getProductCategoriesHandler(request, h) {
+    try {
+      const categories = await this._service.getProductCategories();
+      return {
+        status: "success",
+        data: { categories }
+      }
     } catch (error) {
       console.error(error);
       return Boom.internal();

@@ -53,6 +53,17 @@ export default class ProductsService {
       throw error;
     }
   }
+
+  async getProductCategories() {
+    try {
+      const result = await this._pool.query("SELECT unnest(enum_range(NULL::product_category)) AS category");
+      return result.rows.map(row => row.category);
+    } catch (error) {
+      console.error("Database error in getProductCategories:", error);
+      throw error;
+    }
+  }
+
   async getProductById(id) {
     try {
       const query = {
