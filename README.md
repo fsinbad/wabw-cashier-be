@@ -28,12 +28,8 @@ This project uses [dotenvx](https://dotenvx.com) to manage environment variables
 
 **1. Encrypting your .env file by default:**
 ```bash
-npx dotenvx encryot
-```
-or
-
-```bash
-npx dotenvx -f .env.production
+# .env by default without option
+npx dotenvx encrypt -f <env-file-name> (e.g .env.production)
 ```
 **1. Update `.gitignore`:** Ensure `.env` and `.env.key` are listed in your `.gitignore` file. These files should **never** be committed.
 ```gitignore
@@ -44,7 +40,7 @@ npx dotenvx -f .env.production
 
 **3. Viewing/Decrypting Variables:**
 ```bash
-npx dotenvx decrypt
+npx dotenvx decrypt -f <env-file-name> (e.g .env.production)
 ```
 
 ### How It Works with NPM Scripts
