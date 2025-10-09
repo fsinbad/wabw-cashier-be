@@ -19,6 +19,10 @@ export const productsRoutes = (handler) => [
     handler: handler.getProductsHandler,
     options: {
       auth: "jwt_strategy",
+      cache: {
+        expiresIn: 60 * 10000,
+        privacy: 'private',
+      },
       description: "Get all products",
       tags: ["api", "products"],
     },
