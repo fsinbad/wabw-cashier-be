@@ -52,7 +52,8 @@ export default class ProductsHandler {
 
   async getProductCategoriesHandler(request, h) {
     try {
-      const categories = await this._service.getProductCategories();
+      // const categories = await this._service.getProductCategories();
+      const categories = await request.server.methods.getProductCategories();
       return {
         status: "success",
         data: { categories }

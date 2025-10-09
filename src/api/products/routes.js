@@ -19,10 +19,6 @@ export const productsRoutes = (handler) => [
     handler: handler.getProductCategoriesHandler,
     options: {
       auth: "jwt_strategy",
-      cache: {
-        expiresIn: 60 * 5000,
-        privacy: 'private',
-      },
       description: "get products categories",
       tags: ["api", "products"]
     }
@@ -33,10 +29,10 @@ export const productsRoutes = (handler) => [
     handler: handler.getProductsHandler,
     options: {
       auth: "jwt_strategy",
-      cache: {
-        expiresIn: 60 * 5000,
-        privacy: 'private',
-      },
+      // cache: {
+      //   expiresIn: 60 * 1000,
+      //   privacy: 'private',
+      // },
       description: "Get all products",
       tags: ["api", "products"],
     },
