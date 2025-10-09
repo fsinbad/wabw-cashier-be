@@ -2,9 +2,9 @@ import "dotenv/config";
 import "@dotenvx/dotenvx/config";
 
 const config = {
-  env: process.env.NODE_ENV || 'dev',
+  env: process.env.NODE_ENV || 'development',
   server: {
-    host: process.env.HOST || 'localhost',
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
     port: process.env.NODE_ENV === 'test' ? 0 : process.env.PORT || 3000,
   },
 

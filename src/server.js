@@ -12,7 +12,7 @@ import { ordersPlugin } from "./api/orders/index.js";
 
 export const init = async () => {
   const server = Hapi.server({
-    host: '0.0.0.0',
+    host: config.env === 'production' ? '0.0.0.0' : 'localhost',
     port: config.server.port,
     routes: {
       cors: {
@@ -50,4 +50,6 @@ process.on("unhandledRejection", (err) => {
   process.exit(1);
 });
 
-init();
+if (process.env.NODE_ENV !== 'test') {
+  init();
+}
