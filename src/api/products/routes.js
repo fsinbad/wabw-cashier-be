@@ -9,7 +9,7 @@ export const productsRoutes = (handler) => [
     options: {
       auth: "jwt_strategy",
       validate: { payload: ProductPayloadSchema },
-      description: "Add a new product",
+      description: "add a new product",
       tags: ["api", "products"],
     },
   },
@@ -20,7 +20,7 @@ export const productsRoutes = (handler) => [
     options: {
       auth: "jwt_strategy",
       cache: {
-        expiresIn: 60 * 10000,
+        expiresIn: 60 * 5000,
         privacy: 'private',
       },
       description: "get products categories",
@@ -34,7 +34,7 @@ export const productsRoutes = (handler) => [
     options: {
       auth: "jwt_strategy",
       cache: {
-        expiresIn: 60 * 10000,
+        expiresIn: 60 * 5000,
         privacy: 'private',
       },
       description: "Get all products",
@@ -50,7 +50,7 @@ export const productsRoutes = (handler) => [
       validate: {
         params: Joi.object({ id: Joi.number().integer().required() }),
       },
-      description: "Get a product by its ID",
+      description: "get a product by its ID",
       tags: ["api", "products"],
     },
   },
@@ -64,7 +64,7 @@ export const productsRoutes = (handler) => [
         params: Joi.object({ id: Joi.number().integer().required() }),
         payload: ProductPayloadSchema,
       },
-      description: "Update a product by its ID",
+      description: "update a product by its ID",
       tags: ["api", "products"],
     },
   },
@@ -77,7 +77,7 @@ export const productsRoutes = (handler) => [
       validate: {
         params: Joi.object({ id: Joi.number().integer().required() }),
       },
-      description: "Delete a product by its ID",
+      description: "delete a product by its ID",
       tags: ["api", "products"],
     },
   },

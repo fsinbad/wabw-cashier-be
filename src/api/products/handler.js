@@ -5,7 +5,7 @@ import ClientError from "../../exceptions/ClientError.js";
 export default class ProductsHandler {
   constructor() {
     this._service = new ProductsService();
-
+    // 
     this.postProductHandler = this.postProductHandler.bind(this);
     this.getProductsHandler = this.getProductsHandler.bind(this);
     this.getProductCategoriesHandler = this.getProductCategoriesHandler.bind(this);
@@ -17,6 +17,9 @@ export default class ProductsHandler {
   async postProductHandler(request, h) {
     try {
       const productId = await this._service.addProduct(request.payload);
+      // del cache / invalidation
+      await request.server.methods.getProducts.cache.drop();
+      console.log('Product cache invalidated after creation.');
       return h
         .response({
           status: "success",
@@ -24,6 +27,7 @@ export default class ProductsHandler {
           data: { productId },
         })
         .code(201);
+
     } catch (error) {
       if (error instanceof ClientError) {
         return Boom.badRequest(error.message);
@@ -35,7 +39,7 @@ export default class ProductsHandler {
 
   async getProductsHandler(request, h) {
     try {
-      const products = await this._service.getProducts();
+      const products = await request.server.methods.getProducts();
       return {
         status: "success",
         data: { products },
@@ -86,6 +90,9 @@ export default class ProductsHandler {
     try {
       const { id } = request.params;
       await this._service.updateProduct(id, request.payload);
+      // del cache
+      await request.server.methods.getProducts.cache.drop();
+      console.log('Product cache invalidated after update.');
       return {
         status: "success",
         message: "product updated!",
