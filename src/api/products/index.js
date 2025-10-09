@@ -19,10 +19,10 @@ export const productsPlugin = {
       cache: productsCacheConfig,
     });
 
-    server.method('getProductCategories', productsService.getProductCategories, {
-      bind: productsService,
-      cache: productsCacheConfig,
-    })
+    // server.method('getProductCategories', productsService.getProductCategories, {
+    //   bind: productsService,
+    //   cache: productsCacheConfig,
+    // })
 
     server.route(productsRoutes(productsHandler));
   },
