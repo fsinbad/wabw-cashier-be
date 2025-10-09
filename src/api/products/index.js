@@ -3,9 +3,8 @@ import ProductsHandler from "./handler.js";
 import { productsRoutes } from "./routes.js";
 
 const productsCacheConfig = {
-  expiresIn: 500 * 60,
+  expiresIn: 1000 * 60,
   generateTimeout: 500,
-  privacy: "private",
 };
 
 export const productsPlugin = {
