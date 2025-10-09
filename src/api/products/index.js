@@ -2,11 +2,6 @@ import ProductsService from "../../services/ProductsService.js";
 import ProductsHandler from "./handler.js";
 import { productsRoutes } from "./routes.js";
 
-const productsCacheConfig = {
-  expiresIn: 1000 * 60,
-  generateTimeout: 500,
-};
-
 export const productsPlugin = {
   name: "api-products",
   version: "1.0.0",
@@ -16,7 +11,10 @@ export const productsPlugin = {
 
     server.method('getProducts', productsService.getProducts, {
       bind: productsService,
-      cache: productsCacheConfig,
+      cache: {
+        expiresIn: 1000 * 60,
+        generateTimeout: 2000,
+      },
     });
 
     // server.method('getProductCategories', productsService.getProductCategories, {
