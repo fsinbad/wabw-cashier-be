@@ -14,16 +14,6 @@ import CatboxRedisPkg from '@hapi/catbox-redis';
 import ClientError from "./exceptions/ClientError.js";
 const { Engine: CatboxRedis } = CatboxRedisPkg;
 
-const redisOptions = {
-  url: process.env.REDIS_PUBLIC_URL,
-};
-
-if (config.env === 'production') {
-  redisOptions.tls = {
-    rejectUnauthorized: false,
-  };
-}
-
 export const createServer = async () => {
   const server = Hapi.server({
     host: config.env === 'production' ? '0.0.0.0' : 'localhost',
@@ -32,22 +22,23 @@ export const createServer = async () => {
       cors: {
         origin: ["*"],
       },
-      security: {
-        hsts: {
-          maxAge: 31536000,
-          includeSubDomains: true,
-          preload: true,
-        },
-        xframe: "deny",
-        // xss: "enabled",
-      },
+      // security: {
+      //   hsts: {
+      //     maxAge: 31536000,
+      //     includeSubDomains: true,
+      //     preload: true,
+      //   },
+      //   xframe: "deny",
+      //   // xss: "enabled",
+      // },
     },
     cache: [
       {
-        name: 'redis_cache',
         provider: {
           constructor: CatboxRedis,
-          options: redisOptions
+          options: {
+            ...(config.env === 'production' && { tls: { rejectUnauthorized: false } }),
+          }
         },
       },
     ]
