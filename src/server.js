@@ -36,7 +36,7 @@ export const createServer = async () => {
       {
         name: 'redis_cache',
         provider: {
-          constructor: '@hapi/catbox-redis',
+          constructor: CatboxRedis,
           options: {
             // host: process.env.REDISHOST || '127.0.0.1',
             // port: process.env.REDISPORT,
@@ -60,21 +60,21 @@ export const createServer = async () => {
   // await server.start();
   // console.log(`server running on ${server.info.uri}`);
   // console.log(config.db.url);
-  server.ext('onPreResponse', (request, h) => {
-    const { response } = request;
+  // server.ext('onPreResponse', (request, h) => {
+  //   const { response } = request;
 
-    if (response instanceof ClientError || response.isBoom) {
-      const error = response.isBoom ? response : Boom.boomify(response);
-      const newResponsePayload = {
-        status: 'fail',
-        message: error.output.payload.message,
-      };
-      const newResponse = h.response(newResponsePayload);
-      newResponse.code(error.output.statusCode);
-      return newResponse;
-    }
-    return h.continue;
-  });
+  //   if (response instanceof ClientError || response.isBoom) {
+  //     const error = response.isBoom ? response : Boom.boomify(response);
+  //     const newResponsePayload = {
+  //       status: 'fail',
+  //       message: error.output.payload.message,
+  //     };
+  //     const newResponse = h.response(newResponsePayload);
+  //     newResponse.code(error.output.statusCode);
+  //     return newResponse;
+  //   }
+  //   return h.continue;
+  // });
 
   return server;
 };
@@ -85,11 +85,12 @@ const init = async () => {
   console.log(`Server running on ${server.info.uri}`);
 };
 
-if (process.env.NODE_ENV !== 'test') {
-  process.on('unhandledRejection', (err) => {
-    console.error('Unhandled Rejection:', err);
-    process.exit(1);
-  });
+// if (process.env.NODE_ENV !== 'test') {
+//   process.on('unhandledRejection', (err) => {
+//     console.error('Unhandled Rejection:', err);
+//     process.exit(1);
+//   });
 
-  init();
-}
+// }
+
+init();
