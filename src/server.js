@@ -42,15 +42,15 @@ export const createServer = async () => {
         xss: "enabled",
       },
     },
-    cache: [
-      {
-        name: 'redis_cache',
-        provider: {
-          constructor: CatboxRedis,
-          options: redisOptions
-        },
-      },
-    ]
+    // cache: [
+    //   {
+    //     name: 'redis_cache',
+    //     provider: {
+    //       constructor: CatboxRedis,
+    //       options: redisOptions
+    //     },
+    //   },
+    // ]
   });
 
   await configureJwtStrategy(server);
