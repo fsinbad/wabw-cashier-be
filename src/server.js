@@ -37,7 +37,7 @@ export const createServer = async () => {
         provider: {
           constructor: CatboxRedis,
           options: {
-            url: process.env.REDIS_URL,
+            url: "yamanote.proxy.rlwy.net:36562",
             // host: process.env.REDISHOST,
             // port: process.env.REDISPORT,
             // password: process.env.REDIS_PASSWORD,
@@ -83,7 +83,7 @@ export const createServer = async () => {
     }
     return h.continue;
   });
-  
+
   const cache = server.cache({ segment: "check", expiresIn: 1000 });
   try {
     await cache.set("status", "connected", 1000);

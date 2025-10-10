@@ -8,7 +8,7 @@
     "hapi-pgsql-boilerplate": "./bin/index.js"
   },
   "scripts": {
-    "start": "node src/server.js",
+    "start": "dotenvx run -f .env.production -- node src/server.js",
     "dev": "cross-env NODE_ENV=development dotenvx run -f .env.production -- nodemon src/server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
