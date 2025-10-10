@@ -14,7 +14,8 @@
     "lint:fix": "eslint . --fix",
     "test": "cross-env NODE_ENV=test lab -v --leaks",
     "migrate": "dotenvx run -- node-pg-migrate",
-    "seed": "dotenvx run -- node ./src/db/seed.js"
+    "seed": "dotenvx run -- node ./src/db/seed.js",
+    "test:cache": "node src/test-cache.js"
   },
   "keywords": [
     "hapijs",
