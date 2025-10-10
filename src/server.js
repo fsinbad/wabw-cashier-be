@@ -11,14 +11,16 @@ import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
 import { ordersPlugin } from "./api/orders/index.js";
 import ClientError from "./exceptions/ClientError.js";
+import CatboxRedisPkg from '@hapi/catbox-redis';
+const { Engine: CatboxRedis } = CatboxRedisPkg;
 
-const redis = new Redis(process.env.REDIS_URL + "?family=0", {
+const redisClient = new Redis(process.env.REDIS_URL + "?family=0", {
   connectTimeout: 10000,
   lazyConnect: true,
 });
 
-redis.on("connect", () => console.log("Redis connected successfully"));
-redis.on("error", (err) =>
+redisClient.on("connect", () => console.log("Redis connected successfully"));
+redisClient.on("error", (err) =>
   console.error("Redis connection error:", err.message)
 );
 
@@ -29,6 +31,15 @@ export const createServer = async () => {
     routes: {
       cors: {
         origin: ["*"],
+      },
+    },
+    cache: {
+      provider: {
+        constructor: CatboxRedis,
+        options: {
+          client: redisClient,
+          partition: 'cashier-cache',
+        },
       },
     },
   });
@@ -58,8 +69,8 @@ export const createServer = async () => {
   });
 
   try {
-    await redis.set("status", "connected");
-    const result = await redis.get("status");
+    await redisClient.set("status", "connected");
+    const result = await redisClient.get("status");
     if (result === "connected") {
       console.log("Redis operational and responsive");
     } else {
