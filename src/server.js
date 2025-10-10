@@ -42,7 +42,13 @@ export const createServer = async () => {
             // port: process.env.REDISPORT,
             // password: process.env.REDIS_PASSWORD,
 
-            tls: {},
+            tls: {
+              // Railway Redis membutuhkan TLS
+              rejectUnauthorized: false, // agar sertifikat self-signed tidak ditolak
+            },
+            lazyConnect: true, // tidak langsung connect saat inisialisasi
+            connectTimeout: 10000, // tunggu hingga 10 detik
+            retryStrategy: (times) => Math.min(times * 100, 2000),
             // ...(config.env === 'production' && { tls: { rejectUnauthorized: false } }),
           }
         },
@@ -77,6 +83,13 @@ export const createServer = async () => {
     }
     return h.continue;
   });
+  const cache = server.cache({ segment: "check", expiresIn: 1000 });
+  try {
+    await cache.set("status", "connected", 1000);
+    console.log("✅ Redis cache connected successfully");
+  } catch (err) {
+    console.error("❌ Redis cache connection failed:", err.message);
+  }
 
   return server;
 };
@@ -92,5 +105,6 @@ if (process.env.NODE_ENV !== 'test') {
     console.error('Unhandled Rejection:', err);
     process.exit(1);
   });
+  
   init();
 }
