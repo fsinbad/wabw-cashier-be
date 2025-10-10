@@ -1,5 +1,4 @@
-# --- TAHAP 1: BUILDER ---
-# Tahap ini untuk menginstal semua dependensi dan menyalin source code
+# builder
 FROM node:18-alpine AS builder
 
 # Tentukan direktori kerja di dalam container

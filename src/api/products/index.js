@@ -17,12 +17,10 @@ export const productsPlugin = {
         generateTimeout: 5000,
       },
     });
-
     // server.method('getProductCategories', productsService.getProductCategories, {
     //   bind: productsService,
     //   cache: productsCacheConfig,
     // })
-
     server.route(productsRoutes(productsHandler));
   },
 };

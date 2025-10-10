@@ -1,4 +1,5 @@
 import Hapi from "@hapi/hapi";
+import Boom from '@hapi/boom';
 import "dotenv/config";
 import "@dotenvx/dotenvx/config";
 // import * as config from "./config/index.js";
@@ -10,6 +11,7 @@ import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
 import { ordersPlugin } from "./api/orders/index.js";
 import CatboxRedisPkg from '@hapi/catbox-redis';
+import ClientError from "./exceptions/ClientError.js";
 const { Engine: CatboxRedis } = CatboxRedisPkg;
 
 export const createServer = async () => {
@@ -37,8 +39,8 @@ export const createServer = async () => {
           constructor: CatboxRedis,
           options: {
             host: process.env.REDIS_HOST || '127.0.0.1',
-            port: process.env.REDIS_PORT || 6379,
-            // password: process.env.REDISPASSWORD,
+            port: process.env.REDIS_PORT,
+            password: process.env.REDISPASSWORD,
           },
         },
       },
@@ -70,7 +72,6 @@ export const createServer = async () => {
       newResponse.code(error.output.statusCode);
       return newResponse;
     }
-
     return h.continue;
   });
 
@@ -82,11 +83,6 @@ const init = async () => {
   await server.start();
   console.log(`Server running on ${server.info.uri}`);
 };
-
-process.on("unhandledRejection", (err) => {
-  console.log(err);
-  process.exit(1);
-});
 
 if (process.env.NODE_ENV !== 'test') {
   process.on('unhandledRejection', (err) => {
