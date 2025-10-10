@@ -37,13 +37,11 @@ export const createServer = async () => {
         provider: {
           constructor: CatboxRedis,
           options: {
-            url: "rediss://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@yamanote.proxy.rlwy.net:36562",
+            url: process.env.REDIS_URL,
             // host: process.env.REDISHOST,
             // port: process.env.REDISPORT,
             // password: process.env.REDIS_PASSWORD,
-            ...(process.env.REDIS_URL.startsWith("rediss://") && {
-              tls: { rejectUnauthorized: false },
-            }),
+            tls: { rejectUnauthorized: false },
             lazyConnect: true,
             connectTimeout: 20000,
             retryStrategy: (times) => Math.min(times * 500, 5000),
@@ -85,6 +83,7 @@ export const createServer = async () => {
     }
     return h.continue;
   });
+  
   const cache = server.cache({ segment: "check", expiresIn: 1000 });
   try {
     await cache.set("status", "connected", 1000);
@@ -102,11 +101,11 @@ const init = async () => {
   console.log(`Server running on ${server.info.uri}`);
 };
 
-if (process.env.NODE_ENV !== 'test') {
-  process.on('unhandledRejection', (err) => {
-    console.error('Unhandled Rejection:', err);
-    process.exit(1);
-  });
+// if (process.env.NODE_ENV !== 'test') {
+//   process.on('unhandledRejection', (err) => {
+//     console.error('Unhandled Rejection:', err);
+//     process.exit(1);
+//   });
+// }
 
-  init();
-}
+init();
