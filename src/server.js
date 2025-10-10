@@ -37,19 +37,17 @@ export const createServer = async () => {
         provider: {
           constructor: CatboxRedis,
           options: {
-            url: process.env.REDIS_URL,
+            url: "rediss://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@redis.railway.internal:6379",
             // host: process.env.REDISHOST,
             // port: process.env.REDISPORT,
             // password: process.env.REDIS_PASSWORD,
 
             tls: {
-              // Railway Redis membutuhkan TLS
-              rejectUnauthorized: false, // agar sertifikat self-signed tidak ditolak
+              rejectUnauthorized: false,
             },
-            lazyConnect: true, // tidak langsung connect saat inisialisasi
-            connectTimeout: 10000, // tunggu hingga 10 detik
+            lazyConnect: true,
+            connectTimeout: 10000,
             retryStrategy: (times) => Math.min(times * 100, 2000),
-            // ...(config.env === 'production' && { tls: { rejectUnauthorized: false } }),
           }
         },
       },
@@ -105,6 +103,6 @@ if (process.env.NODE_ENV !== 'test') {
     console.error('Unhandled Rejection:', err);
     process.exit(1);
   });
-  
+
   init();
 }
