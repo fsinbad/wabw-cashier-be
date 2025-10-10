@@ -37,7 +37,7 @@ export const createServer = async () => {
         provider: {
           constructor: CatboxRedis,
           options: {
-            url: "rediss://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@redis.railway.internal:6379",
+            url: "redis://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@yamanote.proxy.rlwy.net:36562",
             // host: process.env.REDISHOST,
             // port: process.env.REDISPORT,
             // password: process.env.REDIS_PASSWORD,
