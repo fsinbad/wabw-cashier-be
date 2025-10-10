@@ -15,7 +15,7 @@
     "test": "cross-env NODE_ENV=test lab -v --leaks",
     "migrate": "dotenvx run -- node-pg-migrate",
     "seed": "dotenvx run -- node ./src/db/seed.js",
-    "test:redis": "node -e \"const Redis = require('ioredis'); console.log('--- Redis Connection Test ---'); console.log('Host:', process.env.REDISHOST); console.log('Port:', process.env.REDISPORT); console.log('Password:', process.env.REDIS_PASSWORD ? 'Exists' : 'Missing'); const redis = new Redis({ host: process.env.REDISHOST, port: Number(process.env.REDISPORT), password: process.env.REDISPASSWORD, lazyConnect: true }); redis.connect().then(() => { console.log('✅ Redis connected successfully!'); redis.quit(); process.exit(0); }).catch(err => { console.error('❌ Redis connection FAILED:', err); process.exit(1); });\""
+    "test:redis:full": "npm install --prefix ./redis-test && node ./redis-test/index.js"
   },
   "keywords": [
     "hapijs",
