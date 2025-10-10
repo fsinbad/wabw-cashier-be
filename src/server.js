@@ -33,15 +33,15 @@ export const createServer = async () => {
         origin: ["*"],
       },
     },
-    // cache: {
-    //   provider: {
-    //     constructor: CatboxRedis,
-    //     options: {
-    //       client: redisClient,
-    //       partition: 'cashier-cache',
-    //     },
-    //   },
-    // },
+    cache: {
+      provider: {
+        constructor: CatboxRedis,
+        options: {
+          client: redisClient,
+          partition: 'cashier-cache',
+        },
+      },
+    },
   });
 
   await configureJwtStrategy(server);
