@@ -4,10 +4,12 @@ import InvariantError from "../exceptions/InvariantError.js";
 import { PG_ERRORS } from "../utils/postgresErrorCodes.js";
 import NotFoundError from "../exceptions/NotFoundError.js";
 import ClientError from "../exceptions/ClientError.js";
+import redisClient from "../lib/redis.js";
 
 export default class ProductsService {
   constructor() {
     this._pool = pool;
+    this._cache = redisClient;
   }
 
   async verifyNewProductName(name) {
@@ -44,12 +46,25 @@ export default class ProductsService {
 
   async getProducts() {
     try {
+      const cacheKey = 'products:all';
+      const cachedProducts = await redisClient.get(cacheKey);
+      if (cachedProducts) {
+        console.log('Serving products from Redis cache...');
+        return JSON.parse(cachedProducts); 
+      }
+      console.log('Cache miss. Fetching products from database...');
       const result = await this._pool.query(
         "SELECT id, name, price, category, stock FROM products ORDER BY name ASC"
       );
-      return result.rows;
+
+      const products = result.rows;
+      await redisClient.set(cacheKey, JSON.stringify(products), {
+        EX: 300,
+      });
+      return products;
+
     } catch (error) {
-      console.error("Database Error in getProducts:", error);
+      console.error("Database/Redis Error in getProducts:", error);
       throw error;
     }
   }
