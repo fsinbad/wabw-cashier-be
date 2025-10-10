@@ -20,7 +20,7 @@ export const createServer = async () => {
     port: config.server.port,
     routes: {
       cors: {
-        origin: ["*"],
+        origin: process.env.CORS_ORIGIN,
       },
       security: {
         hsts: {
