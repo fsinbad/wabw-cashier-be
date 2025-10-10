@@ -1,5 +1,4 @@
 import Hapi from "@hapi/hapi";
-import Boom from '@hapi/boom';
 import "dotenv/config";
 import "@dotenvx/dotenvx/config";
 // import * as config from "./config/index.js";
@@ -38,10 +37,10 @@ export const createServer = async () => {
         provider: {
           constructor: CatboxRedis,
           options: {
-            host: process.env.REDISHOST,
-            port: process.env.REDISPORT,
-            password: process.env.REDIS_PASSWORD,
-            // url: process.env.REDIS_URL,
+            // host: process.env.REDISHOST,
+            // port: process.env.REDISPORT,
+            // password: process.env.REDIS_PASSWORD,
+            url: process.env.REDIS_URL,
           },
         },
       },
@@ -92,5 +91,4 @@ const init = async () => {
 //   });
 
 // }
-
 init();
