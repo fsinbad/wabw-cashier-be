@@ -42,6 +42,9 @@ export const createServer = async () => {
             // port: process.env.REDISPORT,
             // password: process.env.REDIS_PASSWORD,
             url: process.env.REDIS_URL,
+            tls: {
+              rejectUnauthorized: false,
+            }
           },
         },
       },
