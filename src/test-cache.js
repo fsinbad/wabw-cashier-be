@@ -9,9 +9,11 @@ async function testServerInitialization() {
     let server;
 
     try {
+        // Coba buat server. Jika cache gagal konek, ini akan melempar error.
         server = await createServer();
         console.log('✅ Server instance created successfully.');
 
+        // Tes paling definitif: coba gunakan cache-nya
         await server.initialize(); // Perlu initialize sebelum bisa pakai cache
         const testCache = server.cache({ segment: 'test-segment', expiresIn: 1000 * 10 });
         await testCache.set('test-key', { value: 'it works' });
@@ -23,6 +25,7 @@ async function testServerInitialization() {
             throw new Error('Cache set/get failed.');
         }
 
+        // Matikan server setelah selesai
         await server.stop();
         process.exit(0); // Keluar dengan kode sukses
 
@@ -30,6 +33,7 @@ async function testServerInitialization() {
         console.error('❌❌❌ FAILED: Server initialization or cache test failed.');
         console.error(error);
 
+        // Jika server sempat dibuat sebelum error, coba matikan
         if (server) {
             await server.stop();
         }
