@@ -36,7 +36,7 @@ export const createServer = async () => {
       {
         name: 'redis_cache',
         provider: {
-          constructor: CatboxRedis,
+          constructor: '@hapi/catbox-redis',
           options: {
             // host: process.env.REDISHOST || '127.0.0.1',
             // port: process.env.REDISPORT,
