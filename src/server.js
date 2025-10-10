@@ -11,8 +11,8 @@ import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
 import { ordersPlugin } from "./api/orders/index.js";
 import ClientError from "./exceptions/ClientError.js";
-// import CatboxRedisPkg from '@hapi/catbox-redis';
-// const { Engine: CatboxRedis } = CatboxRedisPkg;
+import CatboxRedisPkg from '@hapi/catbox-redis';
+const { Engine: CatboxRedis } = CatboxRedisPkg;
 
 const redisClient = new Redis(process.env.REDIS_URL + "?family=0", {
   connectTimeout: 10000,
