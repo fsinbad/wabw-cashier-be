@@ -14,7 +14,8 @@
     "lint:fix": "eslint . --fix",
     "test": "cross-env NODE_ENV=test lab -v --leaks",
     "migrate": "dotenvx run -- node-pg-migrate",
-    "seed": "dotenvx run -- node ./src/db/seed.js"
+    "seed": "dotenvx run -- node ./src/db/seed.js",
+    "test:redis": "node -e \"import Redis from 'ioredis'; console.log('--- Redis Connection Test ---'); console.log('Host:', process.env.REDISHOST); console.log('Port:', process.env.REDISPORT); console.log('Password:', process.env.REDISPASSWORD ? 'Exists' : 'Missing'); const redis = new Redis({ host: process.env.REDISHOST, port: Number(process.env.REDISPORT), password: process.env.REDISPASSWORD, lazyConnect: true }); redis.connect().then(() => { console.log('✅ Redis connected successfully!'); redis.quit(); process.exit(0); }).catch(err => { console.error('❌ Redis connection FAILED:', err); process.exit(1); });\""
   },
   "keywords": [
     "hapijs",
@@ -37,6 +38,7 @@
     "@supabase/supabase-js": "^2.58.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",
+    "ioredis": "^5.8.1",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "node-pg-migrate": "^8.0.3",
