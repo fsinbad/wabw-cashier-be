@@ -20,7 +20,7 @@ export const createServer = async () => {
     port: config.server.port,
     routes: {
       cors: {
-        origin: ["*"],
+        origin: ["http://localhost:5173"],
       },
       // security: {
       //   hsts: {
@@ -37,6 +37,11 @@ export const createServer = async () => {
         provider: {
           constructor: CatboxRedis,
           options: {
+            host: process.env.REDISHOST,
+            port: process.env.REDISPORT,
+            password: process.env.REDIS_PASSWORD,
+
+            tls: {},
             ...(config.env === 'production' && { tls: { rejectUnauthorized: false } }),
           }
         },
