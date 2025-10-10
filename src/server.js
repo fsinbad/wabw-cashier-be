@@ -15,10 +15,9 @@ import ClientError from "./exceptions/ClientError.js";
 
 /* -------------------- REDIS INITIALIZATION -------------------- */
 // Gunakan URL Redis Railway kamu
-const redisURL = process.env.REDIS_URL;
-
-const redis = new Redis(redisURL + "?family=0", {
-  tls: { rejectUnauthorized: false },
+const redis = new Redis(process.env.REDIS_URL + "?family=0", {
+  connectTimeout: 10000,
+  lazyConnect: true,
 });
 
 // Tes koneksi Redis
