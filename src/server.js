@@ -15,7 +15,7 @@ import ClientError from "./exceptions/ClientError.js";
 const { Engine: CatboxRedis } = CatboxRedisPkg;
 
 const redisOptions = {
-  url: "redis-production-7fc0.up.railway.app",
+  url: "redis://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@yamanote.proxy.rlwy.net:36562",
 };
 
 if (config.env === 'production') {
@@ -42,15 +42,15 @@ export const createServer = async () => {
         xss: "enabled",
       },
     },
-    // cache: [
-    //   {
-    //     name: 'redis_cache',
-    //     provider: {
-    //       constructor: CatboxRedis,
-    //       options: redisOptions
-    //     },
-    //   },
-    // ]
+    cache: [
+      {
+        name: 'redis_cache',
+        provider: {
+          constructor: CatboxRedis,
+          options: redisOptions
+        },
+      },
+    ]
   });
 
   await configureJwtStrategy(server);

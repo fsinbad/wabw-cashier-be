@@ -14,8 +14,7 @@
     "lint:fix": "eslint . --fix",
     "test": "cross-env NODE_ENV=test lab -v --leaks",
     "migrate": "dotenvx run -- node-pg-migrate",
-    "seed": "dotenvx run -- node ./src/db/seed.js",
-    "test:redis:full": "npm install --prefix ./redis-test && node ./redis-test/index.js"
+    "seed": "dotenvx run -- node ./src/db/seed.js"
   },
   "keywords": [
     "hapijs",
