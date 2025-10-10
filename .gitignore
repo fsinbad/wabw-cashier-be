@@ -9,3 +9,5 @@
 ./src/db/seed.js
 */seed.js
 log.txt
+Dockerfile
+docker-compose.yml
