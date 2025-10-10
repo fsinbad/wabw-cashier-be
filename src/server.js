@@ -15,7 +15,7 @@ import ClientError from "./exceptions/ClientError.js";
 const { Engine: CatboxRedis } = CatboxRedisPkg;
 
 const redisOptions = {
-  url: "redis://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@yamanote.proxy.rlwy.net:36562",
+  url: process.env.REDIS_PUBLIC_URL,
 };
 
 if (config.env === 'production') {
@@ -39,7 +39,7 @@ export const createServer = async () => {
           preload: true,
         },
         xframe: "deny",
-        xss: "enabled",
+        // xss: "enabled",
       },
     },
     cache: [
