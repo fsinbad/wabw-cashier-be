@@ -43,7 +43,7 @@ export const createServer = async () => {
             password: process.env.REDIS_PASSWORD,
 
             tls: {},
-            ...(config.env === 'production' && { tls: { rejectUnauthorized: false } }),
+            // ...(config.env === 'production' && { tls: { rejectUnauthorized: false } }),
           }
         },
       },
