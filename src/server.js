@@ -15,7 +15,7 @@ import ClientError from "./exceptions/ClientError.js";
 
 /* -------------------- REDIS INITIALIZATION -------------------- */
 // Gunakan URL Redis Railway kamu
-const redisURL = "rediss://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@yamanote.proxy.rlwy.net:36562";
+const redisURL = process.env.REDIS_URL;
 
 const redis = new Redis(redisURL + "?family=0", {
   tls: { rejectUnauthorized: false },
@@ -94,6 +94,7 @@ const init = async () => {
   }
 };
 
+// Tangani unhandled promise rejection
 process.on("unhandledRejection", (err) => {
   console.error("❌ Unhandled Rejection:", err);
   process.exit(1);
