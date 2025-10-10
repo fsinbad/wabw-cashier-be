@@ -17,7 +17,7 @@ const redis = new Redis(process.env.REDIS_URL + "?family=0", {
   lazyConnect: true,
 });
 
-redis.on("connect", () => console.log("✅ Redis connected successfully"));
+redis.on("connect", () => console.log("Redis connected successfully"));
 redis.on("error", (err) =>
   console.error("Redis connection error:", err.message)
 );
@@ -76,7 +76,7 @@ const init = async () => {
   try {
     const server = await createServer();
     await server.start();
-    console.log(`🚀 Server running on ${server.info.uri}`);
+    console.log(`Server running on ${server.info.uri}`);
   } catch (err) {
     console.error("Server failed to start:", err);
     process.exit(1);
