@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  # Service untuk aplikasi Hapi.js Anda
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cashier_be_app_dev
+    ports:
+      # Petakan port 3000 di komputermu ke port 3000 di container
+      - "3000:3000"
+    volumes:
+      # Sinkronkan folder src agar perubahan kode langsung terlihat (hot-reloading)
+      - ./src:/usr/src/app/src
+    env_file:
+      # Gunakan variabel dari file .env lokal
+      - .env
+    # Jalankan aplikasi dalam mode development dengan nodemon
+    command: npm run dev
+    depends_on:
+      - redis
+
+  # Service untuk cache Redis
+  redis:
+    image: "redis:alpine"
+    container_name: cashier_be_redis_dev
+    ports:
+      - "6379:6379"

@@ -9,8 +9,10 @@ import { configureJwtStrategy } from "./auth/strategy.js";
 import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
 import { ordersPlugin } from "./api/orders/index.js";
+import CatboxRedisPkg from '@hapi/catbox-redis';
+const { Engine: CatboxRedis } = CatboxRedisPkg;
 
-export const init = async () => {
+export const createServer = async () => {
   const server = Hapi.server({
     host: config.env === 'production' ? '0.0.0.0' : 'localhost',
     port: config.server.port,
@@ -28,9 +30,23 @@ export const init = async () => {
         xss: "enabled",
       },
     },
+    cache: [
+      {
+        name: 'redis_cache',
+        provider: {
+          constructor: CatboxRedis,
+          options: {
+            host: process.env.REDIS_HOST || '127.0.0.1',
+            port: process.env.REDIS_PORT || 6379,
+            // password: process.env.REDISPASSWORD,
+          },
+        },
+      },
+    ]
   });
 
   await configureJwtStrategy(server);
+
   await server.register([
     { plugin: authPlugin },
     { plugin: usersPlugin },
@@ -38,11 +54,33 @@ export const init = async () => {
     { plugin: ordersPlugin },
   ]);
 
-  await server.start();
-  console.log(`server running on ${server.info.uri}`);
+  // await server.start();
+  // console.log(`server running on ${server.info.uri}`);
   // console.log(config.db.url);
-  // for testing units
+  server.ext('onPreResponse', (request, h) => {
+    const { response } = request;
+
+    if (response instanceof ClientError || response.isBoom) {
+      const error = response.isBoom ? response : Boom.boomify(response);
+      const newResponsePayload = {
+        status: 'fail',
+        message: error.output.payload.message,
+      };
+      const newResponse = h.response(newResponsePayload);
+      newResponse.code(error.output.statusCode);
+      return newResponse;
+    }
+
+    return h.continue;
+  });
+
   return server;
+};
+
+const init = async () => {
+  const server = await createServer();
+  await server.start();
+  console.log(`Server running on ${server.info.uri}`);
 };
 
 process.on("unhandledRejection", (err) => {
@@ -51,5 +89,10 @@ process.on("unhandledRejection", (err) => {
 });
 
 if (process.env.NODE_ENV !== 'test') {
+  process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Rejection:', err);
+    process.exit(1);
+  });
+
   init();
 }

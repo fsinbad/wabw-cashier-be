@@ -12,8 +12,9 @@ export const productsPlugin = {
     server.method('getProducts', productsService.getProducts, {
       bind: productsService,
       cache: {
-        expiresIn: 1000 * 60,
-        generateTimeout: 2000,
+        cache: 'redis_cache', 
+        expiresIn: 1000 * 60 * 3, 
+        generateTimeout: 5000,
       },
     });
 

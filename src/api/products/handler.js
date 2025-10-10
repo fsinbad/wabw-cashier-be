@@ -39,6 +39,7 @@ export default class ProductsHandler {
 
   async getProductsHandler(request, h) {
     try {
+      // 
       const products = await request.server.methods.getProducts();
       return {
         status: "success",

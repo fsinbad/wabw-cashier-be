@@ -10,7 +10,7 @@ export const shorthands = undefined;
  */
 export const up = (pgm) => {
   pgm.createType("user_role", ["CASHIER", "ADMIN"]);
-  pgm.createType("product_category", ["FOOD", "BEVERAGE", "DESSERT"]);
+  pgm.createType("product_category", ["Food", "Beverage", "Dessert"]);
   pgm.createType("payment_method", [
     "CASH",
     "QRIS",
