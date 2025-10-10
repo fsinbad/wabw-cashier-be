@@ -1,63 +1,48 @@
 import Hapi from "@hapi/hapi";
-import Boom from '@hapi/boom';
+import Boom from "@hapi/boom";
+import Redis from "ioredis";
 import "dotenv/config";
 import "@dotenvx/dotenvx/config";
-// import * as config from "./config/index.js";
-import config from './config/index.js';
-// modules import
+import config from "./config/index.js";
+
+// Modules Import
 import { authPlugin } from "./api/auth/index.js";
 import { configureJwtStrategy } from "./auth/strategy.js";
 import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
 import { ordersPlugin } from "./api/orders/index.js";
-import CatboxRedisPkg from '@hapi/catbox-redis';
 import ClientError from "./exceptions/ClientError.js";
-const { Engine: CatboxRedis } = CatboxRedisPkg;
 
+/* -------------------- REDIS INITIALIZATION -------------------- */
+// Gunakan URL Redis Railway kamu
+const redisURL = "rediss://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@yamanote.proxy.rlwy.net:36562";
+
+const redis = new Redis(redisURL + "?family=0", {
+  tls: { rejectUnauthorized: false },
+});
+
+// Tes koneksi Redis
+redis.on("connect", () => console.log("✅ Redis connected successfully"));
+redis.on("error", (err) =>
+  console.error("❌ Redis connection error:", err.message)
+);
+
+/* -------------------- SERVER INITIALIZATION -------------------- */
 export const createServer = async () => {
   const server = Hapi.server({
-    host: config.env === 'production' ? '0.0.0.0' : 'localhost',
-    port: config.server.port,
+    host: config.env === "production" ? "0.0.0.0" : "localhost",
+    port: config.server.port || 3000,
     routes: {
       cors: {
-        origin: ["http://localhost:5173"],
+        origin: ["*"], // ubah ke domain spesifik jika sudah production
       },
-      // security: {
-      //   hsts: {
-      //     maxAge: 31536000,
-      //     includeSubDomains: true,
-      //     preload: true,
-      //   },
-      //   xframe: "deny",
-      //   // xss: "enabled",
-      // },
     },
-    cache: [
-      {
-        provider: {
-          constructor: CatboxRedis,
-          options: {
-            url: process.env.REDIS_URL,
-            // host: process.env.REDISHOST,
-            // port: process.env.REDISPORT,
-            // password: process.env.REDIS_PASSWORD,
-            tls: { rejectUnauthorized: false },
-            lazyConnect: true,
-            connectTimeout: 20000,
-            retryStrategy: (times) => Math.min(times * 500, 5000),
-            maxRetriesPerRequest: null,
-            reconnectOnError: (err) => {
-              if (err.message.includes("READONLY")) return true;
-              return false;
-            },
-          }
-        },
-      },
-    ]
   });
 
+  // JWT strategy
   await configureJwtStrategy(server);
 
+  // Register API routes
   await server.register([
     { plugin: authPlugin },
     { plugin: usersPlugin },
@@ -65,47 +50,53 @@ export const createServer = async () => {
     { plugin: ordersPlugin },
   ]);
 
-  // await server.start();
-  // console.log(`server running on ${server.info.uri}`);
-  // console.log(config.db.url);
-  server.ext('onPreResponse', (request, h) => {
+  /* -------------------- ERROR HANDLING -------------------- */
+  server.ext("onPreResponse", (request, h) => {
     const { response } = request;
 
     if (response instanceof ClientError || response.isBoom) {
       const error = response.isBoom ? response : Boom.boomify(response);
-      const newResponsePayload = {
-        status: 'fail',
+      const payload = {
+        status: "fail",
         message: error.output.payload.message,
       };
-      const newResponse = h.response(newResponsePayload);
-      newResponse.code(error.output.statusCode);
-      return newResponse;
+      return h.response(payload).code(error.output.statusCode);
     }
+
     return h.continue;
   });
 
-  const cache = server.cache({ segment: "check", expiresIn: 1000 });
+  /* -------------------- TEST REDIS FUNCTIONALITY -------------------- */
   try {
-    await cache.set("status", "connected", 1000);
-    console.log("✅ Redis cache connected successfully");
+    await redis.set("status", "connected");
+    const result = await redis.get("status");
+    if (result === "connected") {
+      console.log("✅ Redis operational and responsive");
+    } else {
+      console.warn("⚠️ Redis did not return expected value");
+    }
   } catch (err) {
-    console.error("❌ Redis cache connection failed:", err.message);
+    console.error("❌ Redis test operation failed:", err.message);
   }
 
   return server;
 };
 
+/* -------------------- SERVER STARTUP -------------------- */
 const init = async () => {
-  const server = await createServer();
-  await server.start();
-  console.log(`Server running on ${server.info.uri}`);
+  try {
+    const server = await createServer();
+    await server.start();
+    console.log(`🚀 Server running on ${server.info.uri}`);
+  } catch (err) {
+    console.error("❌ Server failed to start:", err);
+    process.exit(1);
+  }
 };
 
-// if (process.env.NODE_ENV !== 'test') {
-//   process.on('unhandledRejection', (err) => {
-//     console.error('Unhandled Rejection:', err);
-//     process.exit(1);
-//   });
-// }
+process.on("unhandledRejection", (err) => {
+  console.error("❌ Unhandled Rejection:", err);
+  process.exit(1);
+});
 
 init();
