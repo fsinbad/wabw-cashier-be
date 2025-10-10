@@ -37,17 +37,21 @@ export const createServer = async () => {
         provider: {
           constructor: CatboxRedis,
           options: {
-            url: "redis://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@yamanote.proxy.rlwy.net:36562",
+            url: "rediss://default:vXzPaqnvvntJWLnyMnBorkyFsoxiFvsZ@yamanote.proxy.rlwy.net:36562",
             // host: process.env.REDISHOST,
             // port: process.env.REDISPORT,
             // password: process.env.REDIS_PASSWORD,
-
-            tls: {
-              rejectUnauthorized: false,
-            },
+            ...(process.env.REDIS_URL.startsWith("rediss://") && {
+              tls: { rejectUnauthorized: false },
+            }),
             lazyConnect: true,
-            connectTimeout: 10000,
-            retryStrategy: (times) => Math.min(times * 100, 2000),
+            connectTimeout: 20000,
+            retryStrategy: (times) => Math.min(times * 500, 5000),
+            maxRetriesPerRequest: null,
+            reconnectOnError: (err) => {
+              if (err.message.includes("READONLY")) return true;
+              return false;
+            },
           }
         },
       },
