@@ -40,7 +40,7 @@ export const createServer = async () => {
           options: {
             host: process.env.REDISHOST || '127.0.0.1',
             port: process.env.REDISPORT,
-            password: process.env.REDISPASSWORD,
+            password: process.env.REDIS_PASSWORD,
           },
         },
       },
