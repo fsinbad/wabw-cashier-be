@@ -11,11 +11,10 @@ export const productsPlugin = {
 
     server.method('getProducts', productsService.getProducts, {
       bind: productsService,
-      cache: {
-        // cache: 'redis_cache', 
-        expiresIn: 1000 * 60 * 3, 
-        generateTimeout: 5000,
-      },
+      // cache: {
+      //   expiresIn: 1000 * 60 * 3, 
+      //   generateTimeout: 5000,
+      // },
     });
     // server.method('getProductCategories', productsService.getProductCategories, {
     //   bind: productsService,
