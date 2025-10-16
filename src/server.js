@@ -45,7 +45,6 @@ export const createServer = async () => {
   });
 
   await configureJwtStrategy(server);
-
   await server.register([
     { plugin: authPlugin },
     { plugin: usersPlugin },
@@ -53,6 +52,7 @@ export const createServer = async () => {
     { plugin: ordersPlugin },
   ]);
 
+  // err's handling
   server.ext("onPreResponse", (request, h) => {
     const { response } = request;
 
