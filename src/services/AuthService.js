@@ -39,7 +39,7 @@ export default class AuthService {
         // },
       };
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       throw error;
     }
   }
@@ -53,7 +53,7 @@ export default class AuthService {
       });
       return userId;
     } catch (error) {
-      console.error(`error: ${error}`);
+      // console.error(`error: ${error}`);
       throw error;
     }
   }

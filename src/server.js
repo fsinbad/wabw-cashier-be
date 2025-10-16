@@ -26,7 +26,7 @@ redisClient.on("error", (err) =>
 
 export const createServer = async () => {
   const server = Hapi.server({
-    host: config.env === "production" ? "0.0.0.0" : "localhost",
+    host: config.env === "production" ? config.server.prods_host : config.server.host,
     port: config.server.port || 3000,
     routes: {
       cors: {

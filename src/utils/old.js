@@ -19,11 +19,11 @@
 // const redis = new Redis(redisURL + "?family=0");
 // // Tes koneksi
 // redis.on("connect", () => {
-//     console.log("✅ Redis connected successfully");
+//     console.log("Redis connected successfully");
 // });
 
 // redis.on("error", (err) => {
-//     console.error("❌ Redis connection error:", err.message);
+//     console.error("Redis connection error:", err.message);
 // });
 
 // export const createServer = async () => {
@@ -99,9 +99,9 @@
 //     const cache = server.cache({ segment: "check", expiresIn: 1000 });
 //     try {
 //         await cache.set("status", "connected", 1000);
-//         console.log("✅ Redis cache connected successfully");
+//         console.log("Redis cache connected successfully");
 //     } catch (err) {
-//         console.error("❌ Redis cache connection failed:", err.message);
+//         console.error("Redis cache connection failed:", err.message);
 //     }
 
 //     return server;

@@ -1,10 +1,14 @@
 import "dotenv/config";
 import "@dotenvx/dotenvx/config";
 
+// distribute env's values
 const config = {
   env: process.env.NODE_ENV || 'development',
   server: {
-    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+    // dev
+    host: process.env.HOST,
+    // prod's
+    prods_host: process.env.PRODUCTION_HOST,
     port: process.env.NODE_ENV === 'test' ? 0 : process.env.PORT || 3000,
   },
 
