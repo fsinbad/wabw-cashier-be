@@ -1,8 +1,8 @@
+// import "dotenv/config";
+// import "@dotenvx/dotenvx/config";
 import Hapi from "@hapi/hapi";
 import Boom from "@hapi/boom";
 import Redis from "ioredis";
-// import "dotenv/config";
-// import "@dotenvx/dotenvx/config";
 import config from "./config/index.js";
 // modules
 import { authPlugin } from "./api/auth/index.js";
@@ -30,6 +30,7 @@ export const createServer = async () => {
     port: config.server.port,
     routes: {
       cors: {
+        // will be change
         origin: ["*"],
       },
     },
