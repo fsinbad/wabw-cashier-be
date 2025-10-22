@@ -14,6 +14,7 @@ const adminUser = {
 };
 
 const productsDummy = [
+  // note: change dummies data (add id with random uuid from crypto method(node))
   // jp
   { name: 'Tonkotsu Ramen', price: 75000, category: 'FOOD', stock: 40 },
   { name: 'Salmon Sushi Set (8 pcs)', price: 95000, category: 'FOOD', stock: 25 },

@@ -70,7 +70,7 @@ describe("Products API", () => {
     });
   });
 
-  //   get prod by id
+  // get prod by id
   describe("GET /products/{id}", () => {
     it("should respond with 404 if product is not found", async () => {
       const nonExistentId = 999;
