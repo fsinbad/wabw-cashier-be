@@ -9,7 +9,8 @@ export const authRoutes = (handler) => [
       auth: false,
       plugins: {
         'hapi-rate-limit': {
-          userLimit: 3,
+          enabled: true,
+          userLimit: 2,
           userCache: {
             expiresIn: 15 * 60 * 1000
           },
@@ -31,6 +32,7 @@ export const authRoutes = (handler) => [
       auth: false,
       plugins: {
         'hapi-rate-limit': {
+          enabled: true,
           userLimit: 10,
           userCache: {
             expiresIn: 15 * 60 * 1000
