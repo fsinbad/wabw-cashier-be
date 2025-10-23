@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const OrderItemSchema = Joi.object({
-  productId: Joi.number().integer().positive().required(),
+  productId: Joi.string().required(),
   quantity: Joi.number().integer().min(1).required(),
 });
 

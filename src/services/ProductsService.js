@@ -26,7 +26,7 @@ export default class ProductsService {
   async addProduct({ name, count, price }) {
     try {
       await this.verifyNewProductName(name);
-      const id = `product-${randomUUID()}`;
+      const id = `prod-${randomUUID()}`;
       const query = {
         text: "INSERT INTO products ($1, $2, $3, $4) RETURNING id",
         values: [id, name, count, price],

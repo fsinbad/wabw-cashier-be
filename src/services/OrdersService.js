@@ -1,4 +1,5 @@
 import pool from '../db/client.js';
+import { randomUUID } from "node:crypto";
 import InvariantError from '../exceptions/InvariantError.js';
 import NotFoundError from '../exceptions/NotFoundError.js';
 
@@ -35,9 +36,10 @@ export default class OrdersService {
         totalAmount += Number(product.price) * item.quantity;
       }
 
+      const orderId = `ord-${randomUUID()}`;
       const orderQuery = {
-        text: 'INSERT INTO orders(total_amount, payment_method, customer_name, user_id) VALUES($1, $2, $3, $4) RETURNING id',
-        values: [totalAmount, paymentMethod, customerName, userId],
+        text: 'INSERT INTO orders(id, total_amount, payment_method, customer_name, user_id) VALUES($1, $2, $3, $4, $5) RETURNING id',
+        values: [orderId, totalAmount, paymentMethod, customerName, userId],
       };
       const orderResult = await client.query(orderQuery);
       const newOrderId = orderResult.rows[0].id;

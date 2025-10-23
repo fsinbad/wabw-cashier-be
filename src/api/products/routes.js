@@ -48,7 +48,7 @@ export const productsRoutes = (handler) => [
     options: {
       auth: "jwt_strategy",
       validate: {
-        params: Joi.object({ id: Joi.number().integer().required() }),
+        params: Joi.object({ id: Joi.string().required() }),
       },
       description: "get a product by its ID",
       tags: ["api", "products"],

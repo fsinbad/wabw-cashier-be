@@ -9,7 +9,10 @@ export const shorthands = undefined;
  * @returns {Promise<void> | void}
  */
 export const up = (pgm) => {
-    pgm.addTypeValue('user_role', 'SUPER_ADMIN', { after: 'ADMIN' });
+    console.log("Adding indexes to foreign key columns...");
+    pgm.addIndex('orders', 'user_id');
+    pgm.addIndex('order_items', 'order_id');
+    pgm.addIndex('order_items', 'product_id');
 };
 
 /**
@@ -17,4 +20,9 @@ export const up = (pgm) => {
  * @param run {() => void | undefined}
  * @returns {Promise<void> | void}
  */
-export const down = (pgm) => { };
+export const down = (pgm) => {
+    console.log("Dropping foreign key indexes...");
+    pgm.dropIndex('orders', 'user_id');
+    pgm.dropIndex('order_items', 'order_id');
+    pgm.dropIndex('order_items', 'product_id');
+};
