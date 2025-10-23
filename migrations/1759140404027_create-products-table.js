@@ -10,7 +10,7 @@ export const shorthands = undefined;
  */
 export const up = (pgm) => {
   pgm.createTable("products", {
-    id: "id",
+    id: { type: 'varchar(255)', primaryKey: true },
     name: { type: "varchar(255)", notNull: true, unique: true },
     price: { type: "decimal(10, 2)", notNull: true },
     category: { type: "product_category", notNull: true },

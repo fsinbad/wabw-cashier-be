@@ -10,15 +10,15 @@ export const shorthands = undefined;
  */
 export const up = (pgm) => {
   pgm.createTable("order_items", {
-    id: "id",
+    id: { type: 'varchar(255)', primaryKey: true },
     order_id: {
-      type: "integer",
+      type: "varchar(255)",
       notNull: true,
       references: '"orders"(id)',
       onDelete: "CASCADE",
     },
     product_id: {
-      type: "integer",
+      type: 'varchar(255)',
       notNull: true,
       references: '"products"(id)',
       onDelete: "RESTRICT",
