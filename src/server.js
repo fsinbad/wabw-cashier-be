@@ -55,14 +55,6 @@ export const createServer = async () => {
         enabled: true,
         userLimit: true,
         pathLimit: true,
-        userCache: {
-          cache: 'redis_cache',
-          segment: 'rate-limit-user',
-        },
-        store: {
-          segment: 'rate-limit-global',
-          client: redisClient
-        }
       }
     },
     { plugin: authPlugin },
