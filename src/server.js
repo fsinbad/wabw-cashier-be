@@ -14,7 +14,7 @@ import ClientError from "./exceptions/ClientError.js";
 import CatboxRedisPkg from '@hapi/catbox-redis';
 const { Engine: CatboxRedis } = CatboxRedisPkg;
 
-const redisClient = new Redis(process.env.REDIS_DEV_URL + (config.env === 'development' ? '' : '?family=0'), {
+const redisClient = new Redis(process.env.REDIS_DEV_URL + '?family=0', {
   connectTimeout: 10000,
   lazyConnect: true,
 });
