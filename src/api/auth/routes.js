@@ -10,7 +10,7 @@ export const authRoutes = (handler) => [
       plugins: {
         'hapi-rate-limit': {
           enabled: true,
-          userLimit: 2,
+          userLimit: 3,
           userCache: {
             expiresIn: 15 * 60 * 1000
           },
@@ -34,9 +34,9 @@ export const authRoutes = (handler) => [
         'hapi-rate-limit': {
           enabled: true,
           userLimit: 10,
-          // userCache: {
-          //   expiresIn: 15 * 60 * 1000
-          // },
+          userCache: {
+            expiresIn: 15 * 60 * 1000
+          },
           // store: { segment: 'rate-limit-signin', client: redisClient } 
         }
       },
