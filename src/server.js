@@ -14,10 +14,15 @@ import ClientError from "./exceptions/ClientError.js";
 import CatboxRedisPkg from '@hapi/catbox-redis';
 const { Engine: CatboxRedis } = CatboxRedisPkg;
 
-const redisClient = new Redis(config.env === 'development' ? process.env.REDIS_DEV_URL : process.env.REDIS_URL + (config.env === 'development' ? '' : '?family=0'), {
-  connectTimeout: 10000,
-  lazyConnect: true,
-});
+const redisClient = new Redis(
+  config.env === "development" ? config.redis.dev_url : config.redis.prod_url + (
+    config.env === "development" ? "" : "?family=0"
+  ),
+  {
+    connectTimeout: 10000,
+    lazyConnect: true,
+  }
+);
 
 redisClient.on("connect", () => console.log("Redis connected successfully"));
 redisClient.on("error", (err) =>
@@ -57,7 +62,6 @@ export const createServer = async () => {
   // err's handling
   server.ext("onPreResponse", (request, h) => {
     const { response } = request;
-
     if (response instanceof ClientError || response.isBoom) {
       const error = response.isBoom ? response : Boom.boomify(response);
       const payload = {

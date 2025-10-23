@@ -16,6 +16,11 @@ const config = {
     url: process.env.DATABASE_URL,
   },
 
+  redis: {
+    dev_url: process.env.REDIS_DEV_URL,
+    prod_url: process.env.REDIS_URL
+  },
+
   supabase: {
     url: process.env.SUPABASE_URL,
     serviceKey: process.env.SUPABASE_SERVICE_KEY,
