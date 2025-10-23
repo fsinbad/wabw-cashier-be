@@ -14,7 +14,6 @@ export const authRoutes = (handler) => [
           userCache: {
             expiresIn: 15 * 60 * 1000
           },
-          // store: { segment: 'rate-limit-signin', client: redisClient } 
         }
       },
       validate: {
@@ -37,7 +36,6 @@ export const authRoutes = (handler) => [
           userCache: {
             expiresIn: 15 * 60 * 1000
           },
-          // store: { segment: 'rate-limit-signin', client: redisClient } 
         }
       },
       validate: {
