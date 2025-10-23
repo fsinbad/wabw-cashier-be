@@ -53,13 +53,16 @@ export const createServer = async () => {
       plugin: HapiRateLimit,
       options: {
         enabled: true,
-        userLimit: false,
-        pathLimit: false,
-        userPathLimit: false,
+        userLimit: true,
+        pathLimit: true,
         userCache: {
           cache: 'redis_cache',
           segment: 'rate-limit-user',
         },
+        store: {
+          segment: 'rate-limit-global',
+          client: redisClient
+        }
       }
     },
     { plugin: authPlugin },
