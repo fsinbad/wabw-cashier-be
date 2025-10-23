@@ -7,6 +7,15 @@ export const authRoutes = (handler) => [
     handler: handler.signInHandler,
     options: {
       auth: false,
+      plugins: {
+        'hapi-rate-limit': {
+          userLimit: 3,
+          userCache: {
+            expiresIn: 15 * 60 * 1000
+          },
+          // store: { segment: 'rate-limit-signin', client: redisClient } 
+        }
+      },
       validate: {
         payload: SignInPayloadSchema,
       },
@@ -20,6 +29,15 @@ export const authRoutes = (handler) => [
     handler: handler.signUpHandler,
     options: {
       auth: false,
+      plugins: {
+        'hapi-rate-limit': {
+          userLimit: 10,
+          userCache: {
+            expiresIn: 15 * 60 * 1000
+          },
+          // store: { segment: 'rate-limit-signin', client: redisClient } 
+        }
+      },
       validate: {
         payload: SignUpPayloadSchema,
       },

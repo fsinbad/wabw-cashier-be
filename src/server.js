@@ -50,12 +50,16 @@ export const createServer = async () => {
   await server.register([
     {
       plugin: HapiRateLimit,
-      options: {
-        userLimit: 5,
-        userCache: {
-          expiresIn: 60 * 1000
-        },
-      }
+      // options: {
+      //   userLimit: 5,
+      //   userCache: {
+      //     expiresIn: 60 * 1000
+      //   },
+      //   // store: {
+      //   //   segment: 'rate-limit',
+      //   //   client: redisClient // Gunakan client Redis yang sudah kita buat
+      //   // }
+      // }
     },
     { plugin: authPlugin },
     { plugin: usersPlugin },
