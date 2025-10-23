@@ -51,11 +51,11 @@ export const createServer = async () => {
   await server.register([
     {
       plugin: HapiRateLimit,
-      // options: {
-      //   enabled: true,
-      //   userLimit: false,
-      //   pathLimit: false,
-      // }
+      options: {
+        enabled: true,
+        userLimit: true,
+        pathLimit: false,
+      }
     },
     { plugin: authPlugin },
     { plugin: usersPlugin },
