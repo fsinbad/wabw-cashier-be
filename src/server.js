@@ -50,7 +50,7 @@ export const createServer = async () => {
   await server.register([
     {
       plugin: HapiRateLimit,
-      option: {
+      options: {
         userLimit: 5,
         userCache: {
           expiresIn: 60 * 1000
