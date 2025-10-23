@@ -36,6 +36,7 @@ export const createServer = async () => {
       },
     },
     cache: {
+      name: 'redis_cache',
       provider: {
         constructor: CatboxRedis,
         options: {
