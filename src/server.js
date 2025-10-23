@@ -53,8 +53,6 @@ export const createServer = async () => {
       plugin: HapiRateLimit,
       options: {
         enabled: true,
-        userLimit: true,
-        pathLimit: false,
       }
     },
     { plugin: authPlugin },
