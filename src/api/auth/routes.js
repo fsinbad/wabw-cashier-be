@@ -7,15 +7,6 @@ export const authRoutes = (handler) => [
     handler: handler.signInHandler,
     options: {
       auth: false,
-      plugins: {
-        'hapi-rate-limit': {
-          enabled: true,
-          userLimit: 2,
-          userCache: {
-            expiresIn: 15 * 60 * 1000
-          },
-        }
-      },
       validate: {
         payload: SignInPayloadSchema,
       },
@@ -29,15 +20,6 @@ export const authRoutes = (handler) => [
     handler: handler.signUpHandler,
     options: {
       auth: false,
-      plugins: {
-        'hapi-rate-limit': {
-          enabled: true,
-          userLimit: 10,
-          userCache: {
-            expiresIn: 15 * 60 * 1000
-          },
-        }
-      },
       validate: {
         payload: SignUpPayloadSchema,
       },
