@@ -43,11 +43,10 @@ export default class OrdersService {
       await client.query(orderQuery);
       // const orderResult = await client.query(orderQuery);
       // const newOrderId = orderResult.rows[0].id;
-
       for (const detail of productDetails) {
-        const orderItemId = `item${randomUUID()}`;
+        const orderItemId = `item-${randomUUID()}`;
         const orderItemQuery = {
-          text: 'INSERT INTO order_items(id, order_id, product_id, quantity, price) VALUES($1, $2, $3, $4, $5)',
+          text: 'INSERT INTO order_items(id, order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4, $5)',
           values: [orderItemId, orderId, detail.productId, detail.quantity, detail.price],
         };
         await client.query(orderItemQuery);

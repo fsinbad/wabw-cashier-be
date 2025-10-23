@@ -1,6 +1,7 @@
 // import "dotenv/config";
 // import "@dotenvx/dotenvx/config";
 import Hapi from "@hapi/hapi";
+import HapiRateLimit from 'hapi-rate-limit';
 import Boom from "@hapi/boom";
 import Redis from "ioredis";
 import config from "./config/index.js";
@@ -47,6 +48,15 @@ export const createServer = async () => {
 
   await configureJwtStrategy(server);
   await server.register([
+    {
+      plugin: HapiRateLimit,
+      option: {
+        userLimit: 5,
+        userCache: {
+          expiresIn: 60 * 1000
+        },
+      }
+    },
     { plugin: authPlugin },
     { plugin: usersPlugin },
     { plugin: productsPlugin },
