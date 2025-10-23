@@ -27,7 +27,6 @@ export default class OrdersService {
         }
 
         const product = productResult.rows[0];
-
         if (product.stock < item.quantity) {
           throw new InvariantError(`Stok produk "${product.name}" tidak mencukupi.`);
         }
@@ -41,13 +40,15 @@ export default class OrdersService {
         text: 'INSERT INTO orders(id, total_amount, payment_method, customer_name, user_id) VALUES($1, $2, $3, $4, $5) RETURNING id',
         values: [orderId, totalAmount, paymentMethod, customerName, userId],
       };
-      const orderResult = await client.query(orderQuery);
-      const newOrderId = orderResult.rows[0].id;
+      await client.query(orderQuery);
+      // const orderResult = await client.query(orderQuery);
+      // const newOrderId = orderResult.rows[0].id;
 
       for (const detail of productDetails) {
+        const orderItemId = `item${randomUUID()}`;
         const orderItemQuery = {
-          text: 'INSERT INTO order_items(order_id, product_id, quantity, price) VALUES($1, $2, $3, $4)',
-          values: [newOrderId, detail.productId, detail.quantity, detail.price],
+          text: 'INSERT INTO order_items(id, order_id, product_id, quantity, price) VALUES($1, $2, $3, $4)',
+          values: [orderItemId, orderId, detail.productId, detail.quantity, detail.price],
         };
         await client.query(orderItemQuery);
 
@@ -58,8 +59,7 @@ export default class OrdersService {
         await client.query(updateStockQuery);
       }
       await client.query('COMMIT');
-
-      return newOrderId;
+      return orderId;
     } catch (error) {
       await client.query('ROLLBACK');
       throw error;
