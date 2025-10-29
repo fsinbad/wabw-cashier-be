@@ -16,19 +16,23 @@ export default class AuthService {
       if (!user) {
         throw new AuthenticationError(AUTH_ERROR_MESSAGE);
       }
+
       const isPasswordMatch = await bcrypt.compare(password, user.password);
       if (!isPasswordMatch) {
         throw new AuthenticationError(AUTH_ERROR_MESSAGE);
       }
+
       const payload = {
         sub: user.id,
         username: user.username,
         email: user.email,
         role: user.role,
       };
+
       const token = jwt.sign(payload, config.jwt.secret, {
         expiresIn: process.env.JWT_EXPIRES_IN,
       });
+
       return {
         token: token,
         // user: {
@@ -39,6 +43,7 @@ export default class AuthService {
         // },
       };
     } catch (error) {
+      // log when login err
       // console.error(error);
       throw error;
     }
@@ -51,6 +56,7 @@ export default class AuthService {
         email,
         password,
       });
+
       return userId;
     } catch (error) {
       // console.error(`error: ${error}`);
