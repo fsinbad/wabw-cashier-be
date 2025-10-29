@@ -1,13 +1,23 @@
 import { ProductPayloadSchema } from "./validator.js";
 import Joi from "joi";
 
+const AdminOnlyAuth = {
+  strategy: "jwt_strategy",
+  scope: ["ADMIN", "SUPER_ADMIN"]
+}
+
+const AllStaffAuth = {
+  strategy: "jwt_strategy",
+}
+
 export const productsRoutes = (handler) => [
   {
     method: "POST",
     path: "/products",
     handler: handler.postProductHandler,
     options: {
-      auth: "jwt_strategy",
+      // auth: "jwt_strategy",
+      auth: AdminOnlyAuth,
       validate: { payload: ProductPayloadSchema },
       description: "add a new product",
       tags: ["api", "products"],
@@ -20,7 +30,7 @@ export const productsRoutes = (handler) => [
     options: {
       auth: "jwt_strategy",
       cache: {
-        expiresIn: 60 * 1000 * 5,
+        expiresIn: 60 * 1000 * 60,
         privacy: 'private',
       },
       description: "get products categories",
@@ -59,7 +69,8 @@ export const productsRoutes = (handler) => [
     path: "/products/{id}",
     handler: handler.putProductByIdHandler,
     options: {
-      auth: "jwt_strategy",
+      // auth: "jwt_strategy",
+      auth: AdminOnlyAuth,
       validate: {
         params: Joi.object({ id: Joi.number().integer().required() }),
         payload: ProductPayloadSchema,
@@ -73,7 +84,8 @@ export const productsRoutes = (handler) => [
     path: "/products/{id}",
     handler: handler.deleteProductByIdHandler,
     options: {
-      auth: "jwt_strategy",
+      // auth: "jwt_strategy",
+      auth: AdminOnlyAuth,
       validate: {
         params: Joi.object({ id: Joi.number().integer().required() }),
       },

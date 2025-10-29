@@ -63,7 +63,6 @@ export default class ProductsService {
       //   EX: 300,
       // });
       // return products;
-
     } catch (error) {
       console.error("Database/Redis Error in getProducts:", error);
       throw error;
