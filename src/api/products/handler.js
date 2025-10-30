@@ -92,7 +92,7 @@ export default class ProductsHandler {
     try {
       const { id } = request.params;
       await this._service.updateProduct(id, request.payload);
-      // del cache
+      // del cache in memo
       await request.server.methods.getProducts.cache.drop();
       console.log('Product cache invalidated after update.');
       return {
