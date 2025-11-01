@@ -1,6 +1,5 @@
 import AuthHandler from "./handler.js";
 import { authRoutes } from "./routes.js";
-import { SignInPayloadSchema } from "./validator.js";
 
 export const authPlugin = {
   name: "api-auth",
@@ -8,12 +7,5 @@ export const authPlugin = {
   register: async (server) => {
     const authHandler = new AuthHandler();
     server.route(authRoutes(authHandler));
-    // let authRoutes = authRoutes(authHandler);
-    // authRoutes = authRoutes.map((route) => {
-    //   if (route.path === "/auth/sign-in") {
-    //     route.options.validate = { payload: SignInPayloadSchema };
-    //   }
-    //   return route;
-    // });
   },
 };

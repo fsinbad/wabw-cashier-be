@@ -1,8 +1,6 @@
-// import "dotenv/config";
-// import "@dotenvx/dotenvx/config";
 import Hapi from "@hapi/hapi";
 import Boom from "@hapi/boom";
-import Redis from "ioredis";
+// import Redis from "ioredis";
 import config from "./config/index.js";
 // modules
 import { authPlugin } from "./api/auth/index.js";
@@ -11,23 +9,23 @@ import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
 import { ordersPlugin } from "./api/orders/index.js";
 import ClientError from "./exceptions/ClientError.js";
-import CatboxRedisPkg from '@hapi/catbox-redis';
-const { Engine: CatboxRedis } = CatboxRedisPkg;
+// import CatboxRedisPkg from '@hapi/catbox-redis';
+// const { Engine: CatboxRedis } = CatboxRedisPkg;
 
-const redisClient = new Redis(
-  config.env === "development" ? config.redis.dev_url : config.redis.prod_url + (
-    config.env === "development" ? "" : "?family=0"
-  ),
-  {
-    connectTimeout: 10000,
-    lazyConnect: true,
-  }
-);
-
-redisClient.on("connect", () => console.log("Redis connected successfully"));
-redisClient.on("error", (err) =>
-  console.error("Redis connection error:", err.message)
-);
+// const redisClient = new Redis(
+//   config.env === "development" ? config.redis.dev_url : config.redis.prod_url + (
+//     config.env === "development" ? "" : "?family=0"
+//   ),
+//   {
+//     connectTimeout: 10000,
+//     lazyConnect: true,
+//   }
+// );
+// 
+// redisClient.on("connect", () => console.log("Redis connected successfully"));
+// redisClient.on("error", (err) =>
+//   console.error("Redis connection error:", err.message)
+// );
 
 export const createServer = async () => {
   const server = Hapi.server({
@@ -39,16 +37,16 @@ export const createServer = async () => {
         origin: ["*"],
       },
     },
-    cache: {
-      // name: 'redis_cache',
-      provider: {
-        constructor: CatboxRedis,
-        options: {
-          client: redisClient,
-          partition: 'cashier-cache',
-        },
-      },
-    },
+    // cache: {
+    //   // name: 'redis_cache',
+    //   provider: {
+    //     constructor: CatboxRedis,
+    //     options: {
+    //       client: redisClient,
+    //       partition: 'cashier-cache',
+    //     },
+    //   },
+    // },
   });
 
   await configureJwtStrategy(server);
@@ -73,19 +71,17 @@ export const createServer = async () => {
 
     return h.continue;
   });
-
-  try {
-    await redisClient.set("status", "connected");
-    const result = await redisClient.get("status");
-    if (result === "connected") {
-      console.log("Redis operational and responsive");
-    } else {
-      console.warn("Redis did not return expected value");
-    }
-  } catch (err) {
-    console.error("Redis test operation failed:", err.message);
-  }
-
+  // try {
+  //   await redisClient.set("status", "connected");
+  //   const result = await redisClient.get("status");
+  //   if (result === "connected") {
+  //     console.log("Redis operational and responsive");
+  //   } else {
+  //     console.warn("Redis did not return expected value");
+  //   }
+  // } catch (err) {
+  //   console.error("Redis test operation failed:", err.message);
+  // }
   return server;
 };
 

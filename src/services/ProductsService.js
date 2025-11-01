@@ -4,7 +4,7 @@ import InvariantError from "../exceptions/InvariantError.js";
 import { PG_ERRORS } from "../utils/postgresErrorCodes.js";
 import NotFoundError from "../exceptions/NotFoundError.js";
 import ClientError from "../exceptions/ClientError.js";
-import redisClient from "../lib/redis.js";
+// import redisClient from "../lib/redis.js";
 
 export default class ProductsService {
   constructor() {
