@@ -74,13 +74,13 @@ export default class ProductsHandler {
       };
     } catch (error) {
       if (error instanceof ClientError) {
-        // return Boom.notFound(error.message);
-        return h
-          .response({
-            status: "fail",
-            message: error.message,
-          })
-          .code(404);
+        return Boom.notFound(error.message);
+        // return h
+        //   .response({
+        //     status: "fail",
+        //     message: error.message,
+        //   })
+        //   .code(404);
       }
       console.error(error);
       return Boom.internal();

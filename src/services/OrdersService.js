@@ -4,8 +4,9 @@ import InvariantError from '../exceptions/InvariantError.js';
 import NotFoundError from '../exceptions/NotFoundError.js';
 
 export default class OrdersService {
-  constructor() {
+  constructor(idGenerator = randomUUID) {
     this._pool = pool;
+    this._idGenerator = idGenerator;
   }
 
   async createOrder({ items, customerName, paymentMethod, userId }) {
@@ -35,7 +36,7 @@ export default class OrdersService {
         totalAmount += Number(product.price) * item.quantity;
       }
 
-      const orderId = `ord-${randomUUID()}`;
+      const orderId = `ord-${this._idGenerator()}`;
       const orderQuery = {
         text: 'INSERT INTO orders(id, total_amount, payment_method, customer_name, user_id) VALUES($1, $2, $3, $4, $5) RETURNING id',
         values: [orderId, totalAmount, paymentMethod, customerName, userId],
@@ -44,7 +45,7 @@ export default class OrdersService {
       // const orderResult = await client.query(orderQuery);
       // const newOrderId = orderResult.rows[0].id;
       for (const detail of productDetails) {
-        const orderItemId = `item-${randomUUID()}`;
+        const orderItemId = `item-${this._idGenerator()}`;
         const orderItemQuery = {
           text: 'INSERT INTO order_items(id, order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4, $5)',
           values: [orderItemId, orderId, detail.productId, detail.quantity, detail.price],
