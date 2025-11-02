@@ -43,10 +43,10 @@ export const productsRoutes = (handler) => [
     handler: handler.getProductsHandler,
     options: {
       auth: "jwt_strategy",
-      // cache: {
-      //   expiresIn: 60 * 1000,
-      //   privacy: 'private',
-      // },
+      cache: {
+        expiresIn: 60 * 1000,
+        privacy: 'private',
+      },
       description: "Get all products",
       tags: ["api", "products"],
     },
@@ -72,7 +72,7 @@ export const productsRoutes = (handler) => [
       // auth: "jwt_strategy",
       auth: AdminOnlyAuth,
       validate: {
-        params: Joi.object({ id: Joi.number().integer().required() }),
+        params: Joi.object({ id: Joi.string().required() }),
         payload: ProductPayloadSchema,
       },
       description: "update a product by its ID",
@@ -87,7 +87,7 @@ export const productsRoutes = (handler) => [
       // auth: "jwt_strategy",
       auth: AdminOnlyAuth,
       validate: {
-        params: Joi.object({ id: Joi.number().integer().required() }),
+        params: Joi.object({ id: Joi.string().required() }),
       },
       description: "delete a product by its ID",
       tags: ["api", "products"],

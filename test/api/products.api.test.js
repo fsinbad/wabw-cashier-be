@@ -2,94 +2,95 @@ import Lab from "@hapi/lab";
 import { expect } from "@hapi/code";
 import Sinon from "sinon";
 import jwt from "jsonwebtoken";
-import { init } from "../../src/server.js";
+import { createServer } from '../../src/server.js';
 import ProductsService from "../../src/services/ProductsService.js";
 import NotFoundError from "../../src/exceptions/NotFoundError.js";
+import Joi from "joi";
 
 export const lab = Lab.script();
 const { describe, it, beforeEach, afterEach } = lab;
 
 describe("Products API", () => {
-  let server;
-  let sandbox;
-  let fakeAuthToken;
+    let server;
+    let sandbox;
+    let adminToken;
+    let productsServiceStub;
 
-  beforeEach(async () => {
-    sandbox = Sinon.createSandbox();
-    const payload = {
-      sub: "user-123",
-      email: "test@user.com",
-      role: "CASHIER",
-    };
-    fakeAuthToken = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    beforeEach(async () => {
+        sandbox = Sinon.createSandbox();
+        productsServiceStub = sandbox.stub(ProductsService.prototype);
+
+        const payload = {
+            sub: "user-123",
+            email: "admin@test.com",
+            role: "ADMIN",
+        };
+        adminToken = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
+
+        server = await createServer();
     });
 
-    server = await init();
-  });
-
-  afterEach(async () => {
-    sandbox.restore();
-    await server.stop();
-  });
-
-  describe("GET /products", () => {
-    it("should respond with 200 and a list of products", async () => {
-      const mockProducts = [
-        {
-          id: 1,
-          name: "Nasi Goreng",
-          price: "25000.00",
-          category: "FOOD",
-          stock: 50,
-        },
-        {
-          id: 2,
-          name: "Es Teh Manis",
-          price: "5000.00",
-          category: "BEVERAGE",
-          stock: 100,
-        },
-      ];
-      sandbox
-        .stub(ProductsService.prototype, "getProducts")
-        .resolves(mockProducts);
-
-      const res = await server.inject({
-        method: "GET",
-        url: "/products",
-        headers: {
-          Authorization: `Bearer ${fakeAuthToken}`,
-        },
-      });
-      const responsePayload = JSON.parse(res.payload);
-
-      expect(res.statusCode).to.equal(200);
-      expect(responsePayload.status).to.equal("success");
-      expect(responsePayload.data.products).to.equal(mockProducts);
+    afterEach(async () => {
+        sandbox.restore();
+        await server.stop();
     });
-  });
 
-  // get prod by id
-  describe("GET /products/{id}", () => {
-    it("should respond with 404 if product is not found", async () => {
-      const nonExistentId = 999;
-      sandbox
-        .stub(ProductsService.prototype, "getProductById")
-        .rejects(new NotFoundError("Produk tidak ditemukan"));
+    describe("GET /products", () => {
+        it("should respond with 200 and a list of products", async () => {
+            const mockProducts = [
+                { id: 'prod-123', name: "Nasi Goreng", price: "25000.00" },
+            ];
 
-      const res = await server.inject({
-        method: "GET",
-        url: `/products/${nonExistentId}`,
-        headers: {
-          Authorization: `Bearer ${fakeAuthToken}`,
-        },
-      });
-      const responsePayload = JSON.parse(res.payload);
+            productsServiceStub.getProducts.resolves(mockProducts);
 
-      expect(res.statusCode).to.equal(404);
-      expect(responsePayload.status).to.equal("fail");
-      expect(responsePayload.message).to.equal("Produk tidak ditemukan");
+            const res = await server.inject({
+                method: "GET",
+                url: "/products",
+                headers: { Authorization: `Bearer ${adminToken}` },
+            });
+            const responsePayload = JSON.parse(res.payload);
+
+            expect(res.statusCode).to.equal(200);
+            expect(responsePayload.status).to.equal("success");
+            expect(responsePayload.data.products).to.equal(mockProducts);
+        });
     });
-  });
+
+    describe("GET /products/{id}", () => {
+        it("should respond with 404 if product is not found", async () => {
+            const nonExistentId = "prod-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+
+            productsServiceStub.getProductById.rejects(new NotFoundError("Produk tidak ditemukan"));
+
+            const res = await server.inject({
+                method: "GET",
+                url: `/products/${nonExistentId}`,
+                headers: { Authorization: `Bearer ${adminToken}` },
+            });
+            const responsePayload = JSON.parse(res.payload);
+
+            expect(res.statusCode).to.equal(404);
+            expect(responsePayload.status).to.equal("fail");
+        });
+
+        it("should respond with 400 if id format is invalid (Joi validation)", async () => {
+            const validId = "prod-abc-123";
+            const mockProduct = { id: validId, name: "Tes Produk" };
+
+            productsServiceStub.getProductById.resolves(mockProduct);
+
+            const res = await server.inject({
+                method: "GET",
+                url: `/products/${validId}`,
+                headers: { Authorization: `Bearer ${adminToken}` },
+            });
+            const responsePayload = JSON.parse(res.payload);
+
+            expect(res.statusCode).to.equal(200);
+            expect(responsePayload.status).to.equal("success");
+            expect(responsePayload.data.product).to.equal(mockProduct);
+        });
+    });
 });

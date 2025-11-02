@@ -10,6 +10,7 @@ const config = {
     // prod's
     prods_host: process.env.PRODUCTION_HOST,
     port: process.env.NODE_ENV === 'test' ? 0 : process.env.PORT || 3000,
+    origin: process.env.CORS_ORIGIN,
   },
 
   db: {

@@ -9,6 +9,7 @@ import { productsPlugin } from "./api/products/index.js";
 import { usersPlugin } from "./api/users/index.js";
 import { ordersPlugin } from "./api/orders/index.js";
 import ClientError from "./exceptions/ClientError.js";
+import { reportsPlugin } from "./api/reports/index.js";
 // import CatboxRedisPkg from '@hapi/catbox-redis';
 // const { Engine: CatboxRedis } = CatboxRedisPkg;
 
@@ -34,9 +35,10 @@ export const createServer = async () => {
     routes: {
       cors: {
         // will be change
-        origin: ["*"],
+        origin: [config.server.origin],
       },
     },
+
     // cache: {
     //   // name: 'redis_cache',
     //   provider: {
@@ -55,6 +57,7 @@ export const createServer = async () => {
     { plugin: usersPlugin },
     { plugin: productsPlugin },
     { plugin: ordersPlugin },
+    { plugin: reportsPlugin }
   ]);
 
   // err's handling
@@ -64,7 +67,8 @@ export const createServer = async () => {
       const error = response.isBoom ? response : Boom.boomify(response);
       const payload = {
         status: "fail",
-        message: error.output.payload.message,
+        // message: error.output.payload.message,
+        message: error.message,
       };
       return h.response(payload).code(error.output.statusCode);
     }
