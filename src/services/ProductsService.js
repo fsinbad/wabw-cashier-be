@@ -82,12 +82,12 @@ export default class ProductsService {
   async getProductById(id) {
     try {
       const query = {
-        text: "SELECT * FROM products WHERE id = $1",
+        text: "SELECT id, name, price, category, stock, description, image_url FROM products WHERE id = $1",
         values: [id],
       };
       const result = await this._pool.query(query);
       if (result.rowCount === 0) {
-        throw new NotFoundError(`Produk with id ${id} not found`);
+        throw new NotFoundError(`fail, product with id ${id} not found`);
       }
       return result.rows[0];
     } catch (error) {

@@ -27,7 +27,6 @@ export default class ProductsHandler {
           data: { productId },
         })
         .code(201);
-
     } catch (error) {
       if (error instanceof ClientError) {
         return Boom.badRequest(error.message);
@@ -78,10 +77,10 @@ export default class ProductsHandler {
         // return Boom.notFound(error.message);
         return h
           .response({
-            status: "fail, product not found.",
+            status: "fail",
             message: error.message,
           })
-          .code(400);
+          .code(404);
       }
       console.error(error);
       return Boom.internal();

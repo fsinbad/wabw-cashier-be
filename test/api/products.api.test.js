@@ -40,9 +40,8 @@ describe("Products API", () => {
     describe("GET /products", () => {
         it("should respond with 200 and a list of products", async () => {
             const mockProducts = [
-                { id: 'prod-123', name: "Nasi Goreng", price: "25000.00" },
+                { id: 'prod-123', name: "Nasi Goreng" },
             ];
-
             productsServiceStub.getProducts.resolves(mockProducts);
 
             const res = await server.inject({
@@ -61,7 +60,6 @@ describe("Products API", () => {
     describe("GET /products/{id}", () => {
         it("should respond with 404 if product is not found", async () => {
             const nonExistentId = "prod-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
-
             productsServiceStub.getProductById.rejects(new NotFoundError("Produk tidak ditemukan"));
 
             const res = await server.inject({
@@ -73,9 +71,10 @@ describe("Products API", () => {
 
             expect(res.statusCode).to.equal(404);
             expect(responsePayload.status).to.equal("fail");
+            expect(responsePayload.message).to.equal("Produk tidak ditemukan");
         });
 
-        it("should respond with 400 if id format is invalid (Joi validation)", async () => {
+        it("should respond with 200 if product is found", async () => {
             const validId = "prod-abc-123";
             const mockProduct = { id: validId, name: "Tes Produk" };
 

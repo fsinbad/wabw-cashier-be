@@ -59,7 +59,6 @@ describe('Reports API (GET /reports/summary)', () => {
             },
         });
 
-        // 3. Assert
         expect(res.statusCode).to.equal(403);
     });
 
@@ -69,12 +68,11 @@ describe('Reports API (GET /reports/summary)', () => {
             url: '/reports/summary',
         });
 
-        // 3. Assert
         expect(res.statusCode).to.equal(401);
     });
 
     it('should respond with 500 if the service throws an error', async () => {
-        serviceStub.rejects(new Error('Internal Service Error')); // Suruh service melempar error
+        serviceStub.rejects(new Error('Internal Service Error'));
 
         const res = await server.inject({
             method: 'GET',
