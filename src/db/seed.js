@@ -1,9 +1,6 @@
-// import "dotenv/config";
-// import dotenv from "dotenv";
 import pool from "./client.js";
 import { seedAdminUser } from "./seeders/cashiersSeed.js";
 import { seedProducts } from "./seeders/productsSeed.js";
-// dotenv.config();
 
 async function main() {
   const client = await pool.connect();
