@@ -18,8 +18,8 @@ export default class ProductsHandler {
     try {
       const productId = await this._service.addProduct(request.payload);
       // del cache / invalidation
-      await request.server.methods.getProducts.cache.drop();
-      console.log('Product cache invalidated after creation.');
+      // await request.server.methods.getProducts.cache.drop();
+      // console.log('Product cache invalidated after creation.');
       return h
         .response({
           status: "success",
@@ -30,6 +30,7 @@ export default class ProductsHandler {
     } catch (error) {
       if (error instanceof ClientError) {
         return Boom.badRequest(error.message);
+        // return Boom.boomify(error);
       }
       console.error(error);
       return Boom.internal();
@@ -92,8 +93,8 @@ export default class ProductsHandler {
       const { id } = request.params;
       await this._service.updateProduct(id, request.payload);
       // del cache in memo
-      await request.server.methods.getProducts.cache.drop();
-      console.log('Product cache invalidated after update.');
+      // await request.server.methods.getProducts.cache.drop();
+      // console.log('Product cache invalidated after update.');
       return {
         status: "success",
         message: "product updated!",

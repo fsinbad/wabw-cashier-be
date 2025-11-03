@@ -1,14 +1,12 @@
 import Boom from "@hapi/boom";
-import AuthService from "../../services/AuthService.js";
-import UsersService from "../../services/UsersService.js";
 import AuthenticationError from "../../exceptions/AuthenticationError.js";
 import ClientError from "../../exceptions/ClientError.js";
 
 class AuthHandler {
-  constructor() {
-    this._usersService = new UsersService();
-    // dependency injection [!]
-    this._authService = new AuthService(this._usersService);
+  constructor(authService) {
+    // dep inject
+    this._authService = authService;
+    // 
     this.signInHandler = this.signInHandler.bind(this);
     this.signUpHandler = this.signUpHandler.bind(this);
   }
@@ -20,12 +18,6 @@ class AuthHandler {
 
       return h
         .response({
-          // user: {
-          //   id: result.user.id,
-          //   username: result.user.username,
-          //   email: result.user.email,
-          //   role: result.user.role,
-          // },
           token: result.token,
           status: "success",
           message: "Sign in successful",
