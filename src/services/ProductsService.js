@@ -4,7 +4,6 @@ import InvariantError from "../exceptions/InvariantError.js";
 import { PG_ERRORS } from "../utils/postgresErrorCodes.js";
 import NotFoundError from "../exceptions/NotFoundError.js";
 // import ClientError from "../exceptions/ClientError.js";
-
 // import redisClient from "../lib/redis.js";
 // const CACHE_KEYS = {
 //   PRODUCTS: 'products:all',
@@ -110,18 +109,23 @@ export default class ProductsService {
   }
 
   // by id
-  async updateProduct(id, { name, price, category, stock }) {
+  async updateProduct(id, payload) {
+    const { name, price, category, stock, description } = payload;
+
     try {
       const query = {
-        // text: "UPDATE products SET name = $1, price = $2, category = $3, stock = $4 WHERE id = $5 RETURNING id",
-        text: `UPDATE products SET name = $1, price = $2, category = $3, stock = $4, description = $5, updated_at = NOW() WHERE id = $6 RETURNING id`,
+        text: `UPDATE products SET name = $1, price = $2, category = $3, stock = $4, description = $5, updated_at = NOW() 
+               WHERE id = $6 RETURNING id`,
         values: [name, price, category, stock, description, id],
-        // values: [name, price, category, stock, id],
       };
       const result = await this._pool.query(query);
       if (result.rowCount === 0) {
         throw new NotFoundError('update failed, id not found');
       }
+      
+      // Invalidate cache
+      // await this._cache.del(CACHE_KEYS.PRODUCTS);
+      // await this._cache.del(CACHE_KEYS.CATEGORIES);
       return result.rows[0];
     } catch (error) {
       if (error.code === PG_ERRORS.UNIQUE_VIOLATION) {
