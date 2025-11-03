@@ -1,10 +1,9 @@
 import Boom from "@hapi/boom";
-import ProductsService from "../../services/ProductsService.js";
 import ClientError from "../../exceptions/ClientError.js";
 
 export default class ProductsHandler {
-  constructor() {
-    this._service = new ProductsService();
+  constructor(service) {
+    this._service = service;
     // 
     this.postProductHandler = this.postProductHandler.bind(this);
     this.getProductsHandler = this.getProductsHandler.bind(this);
