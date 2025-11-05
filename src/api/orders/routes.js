@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { OrderPayloadSchema } from './validator.js';
+import { AdminOnlyAuth } from '../../auth/routesRBAC.js';
 
 export const createOrdersRoutes = (handler) => [
   {
@@ -29,9 +30,26 @@ export const createOrdersRoutes = (handler) => [
     handler: handler.getOrderByIdHandler,
     options: {
       auth: 'jwt_strategy',
-      validate: { params: Joi.object({ id: Joi.number().integer().required() }) },
+      validate: {
+        params: Joi.object({
+          id: Joi.string().required(),
+        }),
+      },
       description: 'Get an order by its ID',
       tags: ['api', 'orders'],
     },
   },
+  {
+    method: 'DELETE',
+    path: '/orders/{id}',
+    handler: handler.deleteOrderHandler,
+    options: {
+      auth: AdminOnlyAuth,
+      validate: {
+        params: Joi.object({
+          id: Joi.string().required(),
+        }),
+      },
+    },
+  }
 ];

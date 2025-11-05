@@ -97,4 +97,22 @@ export default class OrdersService {
       items: itemsResult.rows,
     };
   }
+
+  async deleteOrder(orderId) {
+    try {
+      const query = {
+        text: 'DELETE FROM orders WHERE id = $1 RETURNING id',
+        values: [orderId],
+      };
+      const result = await this._pool.query(query);
+
+      if (result.rowCount === 0) {
+        throw new NotFoundError(`Gagal menghapus order. Order dengan ID ${orderId} tidak ditemukan.`);
+      }
+
+    } catch (error) {
+      console.error(`Database Error in deleteOrder for id ${orderId}:`, error);
+      throw error;
+    }
+  }
 }
