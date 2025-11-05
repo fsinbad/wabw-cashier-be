@@ -4,7 +4,7 @@ import InvariantError from '../exceptions/InvariantError.js';
 import NotFoundError from '../exceptions/NotFoundError.js';
 
 export default class OrdersService {
-  constructor(idGenerator = randomUUID) {
+  constructor(productsService, idGenerator = randomUUID) {
     this._pool = pool;
     this._idGenerator = idGenerator;
   }

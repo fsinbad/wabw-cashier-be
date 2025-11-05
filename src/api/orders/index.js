@@ -11,6 +11,7 @@ export const ordersPlugin = {
     const ordersService = new OrdersService(productsService);
     const ordersHandler = new OrdersHandler(ordersService);
     const ordersRoutes = createOrdersRoutes(ordersHandler);
+    
     server.route(ordersRoutes);
   },
 };
