@@ -16,48 +16,35 @@ export default class ProductsService {
     this._pool = pool;
     this._idGenerator = idGenerator;
     // this._cache = redisClient;
-    this._storageService = new StorageService('product-image');
+    // this._storageService = new StorageService('product-image');
   }
 
-  // async verifyNewProductName(name) {
-  //   const query = {
-  //     text: "SELECT name FROM products WHERE name = $1",
-  //     values: [name],
-  //   };
-  //   const result = await this._pool.query(query);
-  //   if (result.rows > 0) {
-  //     throw new ClientError("product name already exist.");
-  //   }
-  // }
-
   async addProduct(payload) {
-    const { name, price, category, stock, description, imageFile } = payload;
-    let imageUrl = null;
-
-    if (imageFile) {
-      imageUrl = await this._storageService.writeFile(imageFile, imageFile.hapi);
-      // console.warn("imageFile received but no StorageService is implemented yet.");
-    }
+    const { name, price, category, stock, description } = payload;
+    const numericPrice = Number(price);
+    const numericStock = Number(stock);
+    const finalCategory = category;
 
     try {
       const id = `prod-${this._idGenerator()}`;
       const query = {
-        text: `INSERT INTO products(id, name, price, category, stock, description, image_url) 
-               VALUES($1, $2, $3, $4, $5, $6, $7) 
-               RETURNING id`,
-        values: [id, name, price, category, stock, description, imageUrl],
+        text: `INSERT INTO products(id, name, price, category, stock, description) 
+                   VALUES($1, $2, $3, $4, $5, $6) 
+                   RETURNING id`,
+        values: [id, name, numericPrice, finalCategory, numericStock, description],
       };
       const result = await this._pool.query(query);
-      // Invalidate cache
-      // await this._cache.del(CACHE_KEYS.PRODUCTS);
-      // await this._cache.del(CACHE_KEYS.CATEGORIES);
+      // (Invalidate cache dis line)
       return result.rows[0].id;
+
     } catch (error) {
       if (error.code === PG_ERRORS.UNIQUE_VIOLATION) {
-        throw new InvariantError(
-          "fail to add product, product name already exist"
-        );
+        throw new InvariantError("fail to add product, product name already exist");
       }
+      if (error instanceof InvariantError) {
+        throw error;
+      }
+
       console.error("Database Error in addProduct:", error);
       throw error;
     }
@@ -72,7 +59,7 @@ export default class ProductsService {
       // }
       // console.log('Cache miss. Fetching products from database..');
       const result = await this._pool.query(
-        "SELECT id, name, price, category, stock FROM products ORDER BY name ASC"
+        "SELECT id, name, price, category, stock, created_at FROM products ORDER BY name ASC"
       );
 
       return result.rows;

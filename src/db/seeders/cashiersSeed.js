@@ -3,10 +3,10 @@ import { randomUUID } from 'node:crypto';
 
 const adminUser = {
     id: crypto.randomUUID(),
-    username: "cashier",
-    email: "cashier@test.com",
+    username: "admin",
+    email: "admin@test.com",
     plainPassword: "nioka666",
-    role: "CASHIER",
+    role: "ADMIN",
 };
 
 export const seedAdminUser = async (client) => {

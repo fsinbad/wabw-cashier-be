@@ -15,7 +15,11 @@ export default class ProductsHandler {
 
   async postProductHandler(request, h) {
     try {
-      const productId = await this._service.addProduct(request.payload);
+      const payload = request.payload;
+      const { name, price, category, stock, description } = payload;
+      const productId = await this._service.addProduct({
+        name, price, category, stock, description
+      });
       // del cache / invalidation
       // await request.server.methods.getProducts.cache.drop();
       // console.log('Product cache invalidated after creation.');
@@ -28,11 +32,11 @@ export default class ProductsHandler {
         .code(201);
     } catch (error) {
       if (error instanceof ClientError) {
-        return Boom.badRequest(error.message);
-        // return Boom.boomify(error);
+        // return Boom.badRequest(error.message);
+        return Boom.boomify(error);
       }
-      console.error(error);
-      return Boom.internal();
+      console.error("Post Product Handler Error:", error);
+      return Boom.internal("An internal server error occurred");
     }
   }
 
