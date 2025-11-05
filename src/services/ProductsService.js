@@ -3,6 +3,7 @@ import pool from "../db/client.js";
 import InvariantError from "../exceptions/InvariantError.js";
 import { PG_ERRORS } from "../utils/postgresErrorCodes.js";
 import NotFoundError from "../exceptions/NotFoundError.js";
+import StorageService from "./StorageService.js";
 // import ClientError from "../exceptions/ClientError.js";
 // import redisClient from "../lib/redis.js";
 // const CACHE_KEYS = {
@@ -15,6 +16,7 @@ export default class ProductsService {
     this._pool = pool;
     this._idGenerator = idGenerator;
     // this._cache = redisClient;
+    this._storageService = new StorageService('product-image');
   }
 
   // async verifyNewProductName(name) {
@@ -31,15 +33,19 @@ export default class ProductsService {
   async addProduct(payload) {
     const { name, price, category, stock, description, imageFile } = payload;
     let imageUrl = null;
+
     if (imageFile) {
-      console.warn("imageFile received but no StorageService is implemented yet.");
+      imageUrl = await this._storageService.writeFile(imageFile, imageFile.hapi);
+      // console.warn("imageFile received but no StorageService is implemented yet.");
     }
+
     try {
       const id = `prod-${this._idGenerator()}`;
       const query = {
-        text: `INSERT INTO products(id, name, price, category, stock, description, image_url) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+        text: `INSERT INTO products(id, name, price, category, stock, description, image_url) 
+               VALUES($1, $2, $3, $4, $5, $6, $7) 
+               RETURNING id`,
         values: [id, name, price, category, stock, description, imageUrl],
-        // values: [id, name, count, price],
       };
       const result = await this._pool.query(query);
       // Invalidate cache
@@ -122,7 +128,7 @@ export default class ProductsService {
       if (result.rowCount === 0) {
         throw new NotFoundError('update failed, id not found');
       }
-      
+
       // Invalidate cache
       // await this._cache.del(CACHE_KEYS.PRODUCTS);
       // await this._cache.del(CACHE_KEYS.CATEGORIES);

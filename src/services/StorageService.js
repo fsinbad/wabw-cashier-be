@@ -1,13 +1,15 @@
-import { supabase } from '../lib/supabaseConf.js';
+import { supabase } from '../lib/supabase.js';
 import InvariantError from '../exceptions/InvariantError.js';
+import path from 'path';
 
 class StorageService {
-    constructor() {
-        this._bucketName = 'product-images';
+    constructor(bucketName = 'product-image') {
+        this._bucketName = bucketName;
     }
 
     async writeFile(fileStream, meta) {
-        const filename = `${+new Date()}-${meta.filename}`;
+        const filename = `${Date.now()}-${meta.filename}`;
+
         const { error } = await supabase.storage
             .from(this._bucketName)
             .upload(filename, fileStream, {
@@ -17,7 +19,7 @@ class StorageService {
 
         if (error) {
             console.error('Supabase Storage Error:', error);
-            throw new InvariantError('Gagal meng-upload gambar.');
+            throw new InvariantError('Gagal meng-upload gambar ke Supabase.');
         }
 
         const { data } = supabase.storage

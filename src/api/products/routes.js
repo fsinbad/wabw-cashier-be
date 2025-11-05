@@ -16,9 +16,14 @@ export const productsRoutes = (handler) => [
     path: "/products",
     handler: handler.postProductHandler,
     options: {
-      // auth: "jwt_strategy",
       auth: AdminOnlyAuth,
       validate: { payload: ProductPayloadSchema },
+      payload: {
+        output: 'stream',
+        parse: true,
+        multipart: true,
+        maxBytes: 1024 * 1024 * 5,
+      },
       description: "add a new product",
       tags: ["api", "products"],
     },
